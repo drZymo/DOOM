@@ -56,19 +56,19 @@ doomdata_t*	netbuffer;		// points inside doomcom
 ticcmd_t	localcmds[BACKUPTICS];
 
 ticcmd_t        netcmds[MAXPLAYERS][BACKUPTICS];
-int         	nettics[MAXNETNODES];
+int32_t         	nettics[MAXNETNODES];
 boolean		nodeingame[MAXNETNODES];		// set false as nodes leave game
 boolean		remoteresend[MAXNETNODES];		// set when local needs tics
-int		resendto[MAXNETNODES];			// set when remote needs tics
-int		resendcount[MAXNETNODES];
+int32_t		resendto[MAXNETNODES];			// set when remote needs tics
+int32_t		resendcount[MAXNETNODES];
 
-int		nodeforplayer[MAXPLAYERS];
+int32_t		nodeforplayer[MAXPLAYERS];
 
-int             maketic;
-int		lastnettic;
-int		skiptics;
-int		ticdup;		
-int		maxsend;	// BACKUPTICS/(2*ticdup)-1
+int32_t             maketic;
+int32_t		lastnettic;
+int32_t		skiptics;
+int32_t		ticdup;		
+int32_t		maxsend;	// BACKUPTICS/(2*ticdup)-1
 
 
 void D_ProcessEvents (void); 
@@ -83,29 +83,29 @@ doomdata_t	reboundstore;
 //
 //
 //
-int NetbufferSize (void)
+intptr_t NetbufferSize (void)
 {
-    return (int)&(((doomdata_t *)0)->cmds[netbuffer->numtics]); 
+    return (intptr_t)&(((doomdata_t *)0)->cmds[netbuffer->numtics]); 
 }
 
 //
 // Checksum 
 //
-unsigned NetbufferChecksum (void)
+uint32_t NetbufferChecksum (void)
 {
-    unsigned		c;
-    int		i,l;
+    uint32_t		c;
+    size_t		i,l;
 
     c = 0x1234567;
 
     // FIXME -endianess?
 #ifdef NORMALUNIX
-    return 0;			// byte order problems
+    return 0;			// uint8_t order problems
 #endif
 
-    l = (NetbufferSize () - (int)&(((doomdata_t *)0)->retransmitfrom))/4;
+    l = (NetbufferSize () - (intptr_t)&(((doomdata_t *)0)->retransmitfrom))/4;
     for (i=0 ; i<l ; i++)
-	c += ((unsigned *)&netbuffer->retransmitfrom)[i] * (i+1);
+	c += ((uint32_t *)&netbuffer->retransmitfrom)[i] * (i+1);
 
     return c & NCMD_CHECKSUM;
 }
@@ -113,9 +113,9 @@ unsigned NetbufferChecksum (void)
 //
 //
 //
-int ExpandTics (int low)
+int32_t ExpandTics (int32_t low)
 {
-    int	delta;
+    int32_t	delta;
 	
     delta = low - (maketic&0xff);
 	
@@ -137,8 +137,8 @@ int ExpandTics (int low)
 //
 void
 HSendPacket
- (int	node,
-  int	flags )
+ (int32_t	node,
+  int32_t	flags )
 {
     netbuffer->checksum = NetbufferChecksum () | flags;
 
@@ -161,8 +161,8 @@ HSendPacket
 	
     if (debugfile)
     {
-	int		i;
-	int		realretrans;
+	int32_t		i;
+	int32_t		realretrans;
 	if (netbuffer->checksum & NCMD_RETRANSMIT)
 	    realretrans = ExpandTics (netbuffer->retransmitfrom);
 	else
@@ -173,7 +173,7 @@ HSendPacket
 		 netbuffer->numtics, realretrans, doomcom->datalength);
 	
 	for (i=0 ; i<doomcom->datalength ; i++)
-	    fprintf (debugfile,"%i ",((byte *)netbuffer)[i]);
+	    fprintf (debugfile,"%i ",((uint8_t *)netbuffer)[i]);
 
 	fprintf (debugfile,"\n");
     }
@@ -223,8 +223,8 @@ boolean HGetPacket (void)
 
     if (debugfile)
     {
-	int		realretrans;
-	int	i;
+	int32_t		realretrans;
+	int32_t	i;
 			
 	if (netbuffer->checksum & NCMD_SETUP)
 	    fprintf (debugfile,"setup packet\n");
@@ -241,7 +241,7 @@ boolean HGetPacket (void)
 		     netbuffer->numtics, realretrans, doomcom->datalength);
 
 	    for (i=0 ; i<doomcom->datalength ; i++)
-		fprintf (debugfile,"%i ",((byte *)netbuffer)[i]);
+		fprintf (debugfile,"%i ",((uint8_t *)netbuffer)[i]);
 	    fprintf (debugfile,"\n");
 	}
     }
@@ -256,11 +256,11 @@ char    exitmsg[80];
 
 void GetPackets (void)
 {
-    int		netconsole;
-    int		netnode;
+    int32_t		netconsole;
+    int32_t		netnode;
     ticcmd_t	*src, *dest;
-    int		realend;
-    int		realstart;
+    int32_t		realend;
+    int32_t		realstart;
 				 
     while ( HGetPacket() )
     {
@@ -270,7 +270,7 @@ void GetPackets (void)
 	netconsole = netbuffer->player & ~PL_DRONE;
 	netnode = doomcom->remotenode;
 	
-	// to save bytes, only the low byte of tic numbers are sent
+	// to save bytes, only the low uint8_t of tic numbers are sent
 	// Figure out what the rest of the bytes are
 	realstart = ExpandTics (netbuffer->starttic);		
 	realend = (realstart+netbuffer->numtics);
@@ -335,7 +335,7 @@ void GetPackets (void)
 
 	// update command store from the packet
         {
-	    int		start;
+	    int32_t		start;
 
 	    remoteresend[netnode] = false;
 		
@@ -359,15 +359,15 @@ void GetPackets (void)
 // Builds ticcmds for console player,
 // sends out a packet
 //
-int      gametime;
+int32_t      gametime;
 
 void NetUpdate (void)
 {
-    int             nowtime;
-    int             newtics;
-    int				i,j;
-    int				realstart;
-    int				gameticdiv;
+    int32_t             nowtime;
+    int32_t             newtics;
+    int32_t				i,j;
+    int32_t				realstart;
+    int32_t				gameticdiv;
     
     // check time
     nowtime = I_GetTime ()/ticdup;
@@ -449,7 +449,7 @@ void NetUpdate (void)
 void CheckAbort (void)
 {
     event_t *ev;
-    int		stoptic;
+    int32_t		stoptic;
 	
     stoptic = I_GetTime () + 2; 
     while (I_GetTime() < stoptic) 
@@ -457,7 +457,7 @@ void CheckAbort (void)
 	
     I_StartTic ();
     for ( ; eventtail != eventhead 
-	      ; eventtail = (++eventtail)&(MAXEVENTS-1) ) 
+	      ; eventtail = (eventtail + 1)&(MAXEVENTS-1) ) 
     { 
 	ev = &events[eventtail]; 
 	if (ev->type == ev_keydown && ev->data1 == KEY_ESCAPE)
@@ -471,7 +471,7 @@ void CheckAbort (void)
 //
 void D_ArbitrateNetStart (void)
 {
-    int		i;
+    int32_t		i;
     boolean	gotinfo[MAXNETNODES];
 	
     autostart = true;
@@ -546,11 +546,11 @@ void D_ArbitrateNetStart (void)
 // D_CheckNetGame
 // Works out player numbers among the net participants
 //
-extern	int			viewangleoffset;
+extern	int32_t			viewangleoffset;
 
 void D_CheckNetGame (void)
 {
-    int             i;
+    int32_t             i;
 	
     for (i=0 ; i<MAXNETNODES ; i++)
     {
@@ -597,7 +597,7 @@ void D_CheckNetGame (void)
 //
 void D_QuitNetGame (void)
 {
-    int             i, j;
+    int32_t             i, j;
 	
     if (debugfile)
 	fclose (debugfile);
@@ -622,23 +622,23 @@ void D_QuitNetGame (void)
 //
 // TryRunTics
 //
-int	frametics[4];
-int	frameon;
-int	frameskip[4];
-int	oldnettics;
+int32_t	frametics[4];
+int32_t	frameon;
+int32_t	frameskip[4];
+int32_t	oldnettics;
 
 extern	boolean	advancedemo;
 
 void TryRunTics (void)
 {
-    int		i;
-    int		lowtic;
-    int		entertic;
-    static int	oldentertics;
-    int		realtics;
-    int		availabletics;
-    int		counts;
-    int		numplaying;
+    int32_t		i;
+    int32_t		lowtic;
+    int32_t		entertic;
+    static int32_t	oldentertics;
+    int32_t		realtics;
+    int32_t		availabletics;
+    int32_t		counts;
+    int32_t		numplaying;
     
     // get real tics		
     entertic = I_GetTime ()/ticdup;
@@ -745,8 +745,8 @@ void TryRunTics (void)
 	    if (i != ticdup-1)
 	    {
 		ticcmd_t	*cmd;
-		int			buf;
-		int			j;
+		int32_t			buf;
+		int32_t			j;
 				
 		buf = (gametic/ticdup)%BACKUPTICS; 
 		for (j=0 ; j<MAXPLAYERS ; j++)

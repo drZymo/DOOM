@@ -48,8 +48,8 @@ T_MovePlane
   fixed_t	speed,
   fixed_t	dest,
   boolean	crush,
-  int		floorOrCeiling,
-  int		direction )
+  int32_t		floorOrCeiling,
+  int32_t		direction )
 {
     boolean	flag;
     fixed_t	lastpos;
@@ -253,14 +253,14 @@ void T_MoveFloor(floormove_t* floor)
 //
 // HANDLE FLOOR TYPES
 //
-int
+int32_t
 EV_DoFloor
 ( line_t*	line,
   floor_e	floortype )
 {
-    int			secnum;
-    int			rtn;
-    int			i;
+    int32_t			secnum;
+    int32_t			rtn;
+    int32_t			i;
     sector_t*		sec;
     floormove_t*	floor;
 
@@ -368,7 +368,7 @@ EV_DoFloor
 
 	  case raiseToTexture:
 	  {
-	      int	minsize = MAXINT;
+	      int32_t	minsize = MAXINT;
 	      side_t*	side;
 				
 	      floor->direction = 1;
@@ -446,18 +446,18 @@ EV_DoFloor
 //
 // BUILD A STAIRCASE!
 //
-int
+int32_t
 EV_BuildStairs
 ( line_t*	line,
   stair_e	type )
 {
-    int			secnum;
-    int			height;
-    int			i;
-    int			newsecnum;
-    int			texture;
-    int			ok;
-    int			rtn;
+    int32_t			secnum;
+    int32_t			height;
+    int32_t			i;
+    int32_t			newsecnum;
+    int32_t			texture;
+    int32_t			ok;
+    int32_t			rtn;
     
     sector_t*		sec;
     sector_t*		tsec;

@@ -21,15 +21,15 @@
 //	Do not try to look them up :-).
 //	In the order of appearance: 
 //
-//	int finetangent[4096]	- Tangens LUT.
+//	int32_t finetangent[4096]	- Tangens LUT.
 //	 Should work with BAM fairly well (12 of 16bit,
 //      effectively, by shifting).
 //
-//	int finesine[10240]		- Sine lookup.
+//	int32_t finesine[10240]		- Sine lookup.
 //	 Guess what, serves as cosine, too.
 //	 Remarkable thing is, how to use BAMs with this? 
 //
-//	int tantoangle[2049]	- ArcTan LUT,
+//	int32_t tantoangle[2049]	- ArcTan LUT,
 //	  maps tan(angle) to angle fast. Gotta search.
 //	
 //    
@@ -40,12 +40,12 @@
 
 
 
-int
+int32_t
 SlopeDiv
-( unsigned	num,
-  unsigned	den)
+( uint32_t	num,
+  uint32_t	den)
 {
-    unsigned 	ans;
+    uint32_t 	ans;
     
     if (den < 512)
 	return SLOPERANGE;
@@ -58,7 +58,7 @@ SlopeDiv
 
 
 
-int finetangent[4096] =
+int32_t finetangent[4096] =
 {
     -170910304,-56965752,-34178904,-24413316,-18988036,-15535599,-13145455,-11392683,
     -10052327,-8994149,-8137527,-7429880,-6835455,-6329090,-5892567,-5512368,
@@ -575,7 +575,7 @@ int finetangent[4096] =
 };
 
 
-int finesine[10240] =
+int32_t finesine[10240] =
 {
     25,75,125,175,226,276,326,376,
     427,477,527,578,628,678,728,779,

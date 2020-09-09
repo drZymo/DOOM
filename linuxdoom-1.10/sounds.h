@@ -23,6 +23,7 @@
 #ifndef __SOUNDS__
 #define __SOUNDS__
 
+#include <stdint.h>
 
 //
 // SoundFX struct.
@@ -35,19 +36,19 @@ struct sfxinfo_struct
     char*	name;
 
     // Sfx singularity (only one at a time)
-    int		singularity;
+    int32_t		singularity;
 
     // Sfx priority
-    int		priority;
+    int32_t		priority;
 
     // referenced sound if a link
     sfxinfo_t*	link;
 
     // pitch if a link
-    int		pitch;
+    int32_t		pitch;
 
     // volume if a link
-    int		volume;
+    int32_t		volume;
 
     // sound data
     void*	data;
@@ -55,10 +56,10 @@ struct sfxinfo_struct
     // this is checked every second to see if sound
     // can be thrown out (if 0, then decrement, if -1,
     // then throw out, if > 0, then it is in use)
-    int		usefulness;
+    int32_t		usefulness;
 
     // lump number of sfx
-    int		lumpnum;		
+    int32_t		lumpnum;		
 };
 
 
@@ -73,13 +74,13 @@ typedef struct
     char*	name;
 
     // lump number of music
-    int		lumpnum;
+    int32_t		lumpnum;
     
     // music data
     void*	data;
 
     // music handle once registered
-    int handle;
+    int32_t handle;
     
 } musicinfo_t;
 

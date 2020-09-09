@@ -45,9 +45,9 @@
 
 // Stage of animation:
 //  0 = text, 1 = art screen, 2 = character cast
-int		finalestage;
+int32_t		finalestage;
 
-int		finalecount;
+int32_t		finalecount;
 
 #define	TEXTSPEED	3
 #define	TEXTWAIT	250
@@ -202,7 +202,7 @@ boolean F_Responder (event_t *event)
 //
 void F_Ticker (void)
 {
-    int		i;
+    int32_t		i;
     
     // check for skipping
     if ( (gamemode == commercial)
@@ -256,15 +256,15 @@ extern	patch_t *hu_font[HU_FONTSIZE];
 
 void F_TextWrite (void)
 {
-    byte*	src;
-    byte*	dest;
+    uint8_t*	src;
+    uint8_t*	dest;
     
-    int		x,y,w;
-    int		count;
+    int32_t		x,y,w;
+    int32_t		count;
     char*	ch;
-    int		c;
-    int		cx;
-    int		cy;
+    int32_t		c;
+    int32_t		cx;
+    int32_t		cy;
     
     // erase the entire screen to a tiled background
     src = W_CacheLumpName ( finaleflat , PU_CACHE);
@@ -355,12 +355,12 @@ castinfo_t	castorder[] = {
     {NULL,0}
 };
 
-int		castnum;
-int		casttics;
+int32_t		castnum;
+int32_t		casttics;
 state_t*	caststate;
 boolean		castdeath;
-int		castframes;
-int		castonmelee;
+int32_t		castframes;
+int32_t		castonmelee;
 boolean		castattacking;
 
 
@@ -390,8 +390,8 @@ void F_StartCast (void)
 //
 void F_CastTicker (void)
 {
-    int		st;
-    int		sfx;
+    int32_t		st;
+    int32_t		sfx;
 	
     if (--casttics > 0)
 	return;			// not time to change state yet
@@ -519,10 +519,10 @@ boolean F_CastResponder (event_t* ev)
 void F_CastPrint (char* text)
 {
     char*	ch;
-    int		c;
-    int		cx;
-    int		w;
-    int		width;
+    int32_t		c;
+    int32_t		cx;
+    int32_t		w;
+    int32_t		width;
     
     // find width
     ch = text;
@@ -570,13 +570,13 @@ void F_CastPrint (char* text)
 //
 // F_CastDrawer
 //
-void V_DrawPatchFlipped (int x, int y, int scrn, patch_t *patch);
+void V_DrawPatchFlipped (int32_t x, int32_t y, int32_t scrn, patch_t *patch);
 
 void F_CastDrawer (void)
 {
     spritedef_t*	sprdef;
     spriteframe_t*	sprframe;
-    int			lump;
+    int32_t			lump;
     boolean		flip;
     patch_t*		patch;
     
@@ -604,23 +604,23 @@ void F_CastDrawer (void)
 //
 void
 F_DrawPatchCol
-( int		x,
+( int32_t		x,
   patch_t*	patch,
-  int		col )
+  int32_t		col )
 {
     column_t*	column;
-    byte*	source;
-    byte*	dest;
-    byte*	desttop;
-    int		count;
+    uint8_t*	source;
+    uint8_t*	dest;
+    uint8_t*	desttop;
+    int32_t		count;
 	
-    column = (column_t *)((byte *)patch + LONG(patch->columnofs[col]));
+    column = (column_t *)((uint8_t *)patch + LONG(patch->columnofs[col]));
     desttop = screens[0]+x;
 
     // step through the posts in a column
     while (column->topdelta != 0xff )
     {
-	source = (byte *)column + 3;
+	source = (uint8_t *)column + 3;
 	dest = desttop + column->topdelta*SCREENWIDTH;
 	count = column->length;
 		
@@ -629,7 +629,7 @@ F_DrawPatchCol
 	    *dest = *source++;
 	    dest += SCREENWIDTH;
 	}
-	column = (column_t *)(  (byte *)column + column->length + 4 );
+	column = (column_t *)(  (uint8_t *)column + column->length + 4 );
     }
 }
 
@@ -639,13 +639,13 @@ F_DrawPatchCol
 //
 void F_BunnyScroll (void)
 {
-    int		scrolled;
-    int		x;
+    int32_t		scrolled;
+    int32_t		x;
     patch_t*	p1;
     patch_t*	p2;
     char	name[10];
-    int		stage;
-    static int	laststage;
+    int32_t		stage;
+    static int32_t	laststage;
 		
     p1 = W_CacheLumpName ("PFUB2", PU_LEVEL);
     p2 = W_CacheLumpName ("PFUB1", PU_LEVEL);

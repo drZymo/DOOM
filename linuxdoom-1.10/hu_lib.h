@@ -45,16 +45,16 @@
 typedef struct
 {
     // left-justified position of scrolling text window
-    int		x;
-    int		y;
+    int32_t		x;
+    int32_t		y;
     
     patch_t**	f;			// font
-    int		sc;			// start character
+    int32_t		sc;			// start character
     char	l[HU_MAXLINELENGTH+1];	// line of text
-    int		len;		      	// current line length
+    int32_t		len;		      	// current line length
 
     // whether this line needs to be udpated
-    int		needsupdate;	      
+    int32_t		needsupdate;	      
 
 } hu_textline_t;
 
@@ -65,8 +65,8 @@ typedef struct
 typedef struct
 {
     hu_textline_t	l[HU_MAXLINES];	// text lines to draw
-    int			h;		// height in lines
-    int			cl;		// current line number
+    int32_t			h;		// height in lines
+    int32_t			cl;		// current line number
 
     // pointer to boolean stating whether to update window
     boolean*		on;
@@ -83,7 +83,7 @@ typedef struct
     hu_textline_t	l;		// text line to input on
 
      // left margin past which I am not to delete characters
-    int			lm;
+    int32_t			lm;
 
     // pointer to boolean stating whether to update window
     boolean*		on; 
@@ -106,7 +106,7 @@ void HUlib_init(void);
 // clear a line of text
 void	HUlib_clearTextLine(hu_textline_t *t);
 
-void	HUlib_initTextLine(hu_textline_t *t, int x, int y, patch_t **f, int sc);
+void	HUlib_initTextLine(hu_textline_t *t, int32_t x, int32_t y, patch_t **f, int32_t sc);
 
 // returns success
 boolean HUlib_addCharToTextLine(hu_textline_t *t, char ch);
@@ -129,11 +129,11 @@ void	HUlib_eraseTextLine(hu_textline_t *l);
 void
 HUlib_initSText
 ( hu_stext_t*	s,
-  int		x,
-  int		y,
-  int		h,
+  int32_t		x,
+  int32_t		y,
+  int32_t		h,
   patch_t**	font,
-  int		startchar,
+  int32_t		startchar,
   boolean*	on );
 
 // add a new line
@@ -156,10 +156,10 @@ void HUlib_eraseSText(hu_stext_t* s);
 void
 HUlib_initIText
 ( hu_itext_t*	it,
-  int		x,
-  int		y,
+  int32_t		x,
+  int32_t		y,
   patch_t**	font,
-  int		startchar,
+  int32_t		startchar,
   boolean*	on );
 
 // enforces left margin
@@ -181,7 +181,7 @@ HUlib_addPrefixToIText
 boolean
 HUlib_keyInIText
 ( hu_itext_t*	it,
-  unsigned char ch );
+  uint8_t ch );
 
 void HUlib_drawIText(hu_itext_t* it);
 

@@ -59,74 +59,74 @@ typedef struct wadinfo_struct
 {
     // should be IWAD
     char	identification[4];	
-    int		numlumps;
-    int		infotableofs;
+    int32_t		numlumps;
+    int32_t		infotableofs;
     
 } wadinfo_t;
 
 
 typedef struct filelump_struct
 {
-    int		filepos;
-    int		size;
+    int32_t		filepos;
+    int32_t		size;
     char	name[8];
     
 } filelump_t;
 
 
 // an internal time keeper
-static int	mytime = 0;
+static int32_t	mytime = 0;
 
 // number of sound effects
-int 		numsounds;
+int32_t 		numsounds;
 
 // longest sound effect
-int 		longsound;
+int32_t 		longsound;
 
 // lengths of all sound effects
-int 		lengths[NUMSFX];
+int32_t 		lengths[NUMSFX];
 
 // mixing buffer
-signed short	mixbuffer[MIXBUFFERSIZE];
+int16_t	mixbuffer[MIXBUFFERSIZE];
 
 // file descriptor of sfx device
-int		sfxdevice;			
+int32_t		sfxdevice;			
 
 // file descriptor of music device
-int 		musdevice;			
+int32_t 		musdevice;			
 
 // the channel data pointers
-unsigned char*	channels[8];
+uint8_t*	channels[8];
 
 // the channel step amount
-unsigned int	channelstep[8];
+uint32_t	channelstep[8];
 
 // 0.16 bit remainder of last step
-unsigned int	channelstepremainder[8];
+uint32_t	channelstepremainder[8];
 
 // the channel data end pointers
-unsigned char*	channelsend[8];
+uint8_t*	channelsend[8];
 
 // time that the channel started playing
-int		channelstart[8];
+int32_t		channelstart[8];
 
 // the channel handles
-int 		channelhandles[8];
+int32_t 		channelhandles[8];
 
 // the channel left volume lookup
-int*		channelleftvol_lookup[8];
+int32_t*		channelleftvol_lookup[8];
 
 // the channel right volume lookup
-int*		channelrightvol_lookup[8];
+int32_t*		channelrightvol_lookup[8];
 
 // sfx id of the playing sound effect
-int		channelids[8];			
+int32_t		channelids[8];			
 
-int		snd_verbose=1;
+int32_t		snd_verbose=1;
 
-int		steptable[256];
+int32_t		steptable[256];
 
-int		vol_lookup[128*256];
+int32_t		vol_lookup[128*256];
 
 static void derror(char* msg)
 {
@@ -134,18 +134,18 @@ static void derror(char* msg)
     exit(-1);
 }
 
-int mix(void)
+int32_t mix(void)
 {
 
-    register int		dl;
-    register int		dr;
-    register unsigned int	sample;
+    register int32_t		dl;
+    register int32_t		dr;
+    register uint32_t	sample;
     
-    signed short*		leftout;
-    signed short*		rightout;
-    signed short*		leftend;
+    int16_t*		leftout;
+    int16_t*		rightout;
+    int16_t*		leftend;
     
-    int				step;
+    int32_t				step;
 
     leftout = mixbuffer;
     rightout = mixbuffer+1;
@@ -263,7 +263,7 @@ int mix(void)
 		channels[7] = 0;
 	}
 
-	// Has been char instead of short.
+	// Has been char instead of int16_t.
 	// if (dl > 127) *leftout = 127;
 	// else if (dl < -128) *leftout = -128;
 	// else *leftout = dl;
@@ -297,10 +297,10 @@ int mix(void)
 
 void
 grabdata
-( int		c,
+( int32_t		c,
   char**	v )
 {
-    int		i;
+    int32_t		i;
     char*	name;
     char*	doom1wad;
     char*	doomwad;
@@ -386,7 +386,7 @@ grabdata
 	}
 	// test only
 	//  {
-	//  int fd;
+	//  int32_t fd;
 	//  char name[10];
 	//  sprintf(name, "sfx%d", i);
 	//  fd = open(name, O_WRONLY|O_CREAT, 0644);
@@ -410,23 +410,23 @@ void updatesounds(void)
 
 }
 
-int
+int32_t
 addsfx
-( int		sfxid,
-  int		volume,
-  int		step,
-  int		seperation )
+( int32_t		sfxid,
+  int32_t		volume,
+  int32_t		step,
+  int32_t		seperation )
 {
-    static unsigned short	handlenums = 0;
+    static uint16_t	handlenums = 0;
  
-    int		i;
-    int		rc = -1;
+    int32_t		i;
+    int32_t		rc = -1;
     
-    int		oldest = mytime;
-    int		oldestnum = 0;
-    int		slot;
-    int		rightvol;
-    int		leftvol;
+    int32_t		oldest = mytime;
+    int32_t		oldestnum = 0;
+    int32_t		slot;
+    int32_t		rightvol;
+    int32_t		leftvol;
 
     // play these sound effects
     //  only one at a time
@@ -461,7 +461,7 @@ addsfx
     else
 	slot = i;
 
-    channels[slot] = (unsigned char *) S_sfx[sfxid].data;
+    channels[slot] = (uint8_t *) S_sfx[sfxid].data;
     channelsend[slot] = channels[slot] + lengths[sfxid];
 
     if (!handlenums)
@@ -504,10 +504,10 @@ addsfx
 }
 
 
-void outputushort(int num)
+void outputushort(int32_t num)
 {
 
-    static unsigned char	buff[5] = { 0, 0, 0, 0, '\n' };
+    static uint8_t	buff[5] = { 0, 0, 0, 0, '\n' };
     static char*		badbuff = "xxxx\n";
 
     // outputs a 16-bit # in hex or "xxxx" if -1.
@@ -532,13 +532,13 @@ void outputushort(int num)
 void initdata(void)
 {
 
-    int		i;
-    int		j;
+    int32_t		i;
+    int32_t		j;
     
-    int*	steptablemid = steptable + 128;
+    int32_t*	steptablemid = steptable + 128;
 
     for (i=0 ;
-	 i<sizeof(channels)/sizeof(unsigned char *) ;
+	 i<sizeof(channels)/sizeof(uint8_t *) ;
 	 i++)
     {
 	channels[i] = 0;
@@ -550,7 +550,7 @@ void initdata(void)
 	steptablemid[i] = pow(2.0, (i/64.0))*65536.0;
 
     // generates volume lookup tables
-    //  which also turn the unsigned samples
+    //  which also turn the uint32_t samples
     //  into signed samples
     // for (i=0 ; i<128 ; i++)
     // for (j=0 ; j<256 ; j++)
@@ -579,28 +579,28 @@ fd_set		scratchset;
 
 
 
-int
+int32_t
 main
-( int		c,
+( int32_t		c,
   char**	v )
 {
 
-    int		done = 0;
-    int		rc;
-    int		nrc;
-    int		sndnum;
-    int		handle = 0;
+    int32_t		done = 0;
+    int32_t		rc;
+    int32_t		nrc;
+    int32_t		sndnum;
+    int32_t		handle = 0;
     
-    unsigned char	commandbuf[10];
+    uint8_t	commandbuf[10];
     struct timeval	zerowait = { 0, 0 };
 
     
-    int 	step;
-    int 	vol;
-    int		sep;
+    int32_t 	step;
+    int32_t 	vol;
+    int32_t		sep;
     
-    int		i;
-    int		waitingtofinish=0;
+    int32_t		i;
+    int32_t		waitingtofinish=0;
 
     // get sound data
     grabdata(c, v);
@@ -693,7 +693,7 @@ main
 			    
 			  case 's':
 			  {
-			      int fd;
+			      int32_t fd;
 			      read(0, commandbuf, 3);
 			      commandbuf[2] = 0;
 			      fd = open((char*)commandbuf, O_CREAT|O_WRONLY, 0644);

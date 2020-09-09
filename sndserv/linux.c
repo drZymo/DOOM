@@ -40,17 +40,17 @@
 #include <linux/soundcard.h>
 
 #include "soundsrv.h"
+#include <errno.h>
 
-int	audio_fd;
+int32_t	audio_fd;
 
 void
 myioctl
-( int	fd,
-  int	command,
-  int*	arg )
+( int32_t	fd,
+  int32_t	command,
+  int32_t*	arg )
 {   
-    int		rc;
-    extern int	errno;
+    int32_t		rc;
     
     rc = ioctl(fd, command, arg);  
     if (rc < 0)
@@ -67,11 +67,11 @@ void I_InitMusic(void)
 
 void
 I_InitSound
-( int	samplerate,
-  int	samplesize )
+( int32_t	samplerate,
+  int32_t	samplesize )
 {
 
-    int i;
+    int32_t i;
                 
     audio_fd = open("/dev/dsp", O_WRONLY);
     if (audio_fd<0)
@@ -98,7 +98,7 @@ I_InitSound
 void
 I_SubmitOutputBuffer
 ( void*	samples,
-  int	samplecount )
+  int32_t	samplecount )
 {
     write(audio_fd, samples, samplecount*4);
 }

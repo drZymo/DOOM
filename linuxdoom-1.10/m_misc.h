@@ -35,12 +35,12 @@ boolean
 M_WriteFile
 ( char const*	name,
   void*		source,
-  int		length );
+  int32_t		length );
 
-int
+int32_t
 M_ReadFile
 ( char const*	name,
-  byte**	buffer );
+  uint8_t**	buffer );
 
 void M_ScreenShot (void);
 
@@ -49,10 +49,10 @@ void M_LoadDefaults (void);
 void M_SaveDefaults (void);
 
 
-int
+int32_t
 M_DrawText
-( int		x,
-  int		y,
+( int32_t		x,
+  int32_t		y,
   boolean	direct,
   char*		string );
 

@@ -44,9 +44,9 @@ typedef enum
 typedef struct
 {
     evtype_t	type;
-    int		data1;		// keys / mouse/joystick buttons
-    int		data2;		// mouse/joystick x move
-    int		data3;		// mouse/joystick y move
+    int32_t		data1;		// keys / mouse/joystick buttons
+    int32_t		data2;		// mouse/joystick x move
+    int32_t		data3;		// mouse/joystick y move
 } event_t;
 
  
@@ -93,7 +93,7 @@ typedef enum
     BTS_SAVEGAME	= 2,
 
     // Savegame slot numbers
-    //  occupy the second byte of buttons.    
+    //  occupy the second uint8_t of buttons.    
     BTS_SAVEMASK	= (4+8+16),
     BTS_SAVESHIFT 	= 2,
   
@@ -108,8 +108,8 @@ typedef enum
 #define MAXEVENTS		64
 
 extern  event_t		events[MAXEVENTS];
-extern  int             eventhead;
-extern	int		eventtail;
+extern  int32_t             eventhead;
+extern	int32_t		eventtail;
 
 extern  gameaction_t    gameaction;
 

@@ -37,22 +37,22 @@
 // when zero, stop the wipe
 static boolean	go = 0;
 
-static byte*	wipe_scr_start;
-static byte*	wipe_scr_end;
-static byte*	wipe_scr;
+static uint8_t*	wipe_scr_start;
+static uint8_t*	wipe_scr_end;
+static uint8_t*	wipe_scr;
 
 
 void
 wipe_shittyColMajorXform
-( short*	array,
-  int		width,
-  int		height )
+( int16_t*	array,
+  int32_t		width,
+  int32_t		height )
 {
-    int		x;
-    int		y;
-    short*	dest;
+    int32_t		x;
+    int32_t		y;
+    int16_t*	dest;
 
-    dest = (short*) Z_Malloc(width*height*2, PU_STATIC, 0);
+    dest = (int16_t*) Z_Malloc(width*height*2, PU_STATIC, 0);
 
     for(y=0;y<height;y++)
 	for(x=0;x<width;x++)
@@ -64,26 +64,26 @@ wipe_shittyColMajorXform
 
 }
 
-int
+int32_t
 wipe_initColorXForm
-( int	width,
-  int	height,
-  int	ticks )
+( int32_t	width,
+  int32_t	height,
+  int32_t	ticks )
 {
     memcpy(wipe_scr, wipe_scr_start, width*height);
     return 0;
 }
 
-int
+int32_t
 wipe_doColorXForm
-( int	width,
-  int	height,
-  int	ticks )
+( int32_t	width,
+  int32_t	height,
+  int32_t	ticks )
 {
     boolean	changed;
-    byte*	w;
-    byte*	e;
-    int		newval;
+    uint8_t*	w;
+    uint8_t*	e;
+    int32_t		newval;
 
     changed = false;
     w = wipe_scr;
@@ -120,37 +120,37 @@ wipe_doColorXForm
 
 }
 
-int
+int32_t
 wipe_exitColorXForm
-( int	width,
-  int	height,
-  int	ticks )
+( int32_t	width,
+  int32_t	height,
+  int32_t	ticks )
 {
     return 0;
 }
 
 
-static int*	y;
+static int32_t*	y;
 
-int
+int32_t
 wipe_initMelt
-( int	width,
-  int	height,
-  int	ticks )
+( int32_t	width,
+  int32_t	height,
+  int32_t	ticks )
 {
-    int i, r;
+    int32_t i, r;
     
     // copy start screen to main screen
     memcpy(wipe_scr, wipe_scr_start, width*height);
     
     // makes this wipe faster (in theory)
     // to have stuff in column-major format
-    wipe_shittyColMajorXform((short*)wipe_scr_start, width/2, height);
-    wipe_shittyColMajorXform((short*)wipe_scr_end, width/2, height);
+    wipe_shittyColMajorXform((int16_t*)wipe_scr_start, width/2, height);
+    wipe_shittyColMajorXform((int16_t*)wipe_scr_end, width/2, height);
     
     // setup initial column positions
     // (y<0 => not ready to scroll yet)
-    y = (int *) Z_Malloc(width*sizeof(int), PU_STATIC, 0);
+    y = (int32_t *) Z_Malloc(width*sizeof(int32_t), PU_STATIC, 0);
     y[0] = -(M_Random()%16);
     for (i=1;i<width;i++)
     {
@@ -163,19 +163,19 @@ wipe_initMelt
     return 0;
 }
 
-int
+int32_t
 wipe_doMelt
-( int	width,
-  int	height,
-  int	ticks )
+( int32_t	width,
+  int32_t	height,
+  int32_t	ticks )
 {
-    int		i;
-    int		j;
-    int		dy;
-    int		idx;
+    int32_t		i;
+    int32_t		j;
+    int32_t		dy;
+    int32_t		idx;
     
-    short*	s;
-    short*	d;
+    int16_t*	s;
+    int16_t*	d;
     boolean	done = true;
 
     width/=2;
@@ -192,8 +192,8 @@ wipe_doMelt
 	    {
 		dy = (y[i] < 16) ? y[i]+1 : 8;
 		if (y[i]+dy >= height) dy = height - y[i];
-		s = &((short *)wipe_scr_end)[i*height+y[i]];
-		d = &((short *)wipe_scr)[y[i]*width+i];
+		s = &((int16_t *)wipe_scr_end)[i*height+y[i]];
+		d = &((int16_t *)wipe_scr)[y[i]*width+i];
 		idx = 0;
 		for (j=dy;j;j--)
 		{
@@ -201,8 +201,8 @@ wipe_doMelt
 		    idx += width;
 		}
 		y[i] += dy;
-		s = &((short *)wipe_scr_start)[i*height];
-		d = &((short *)wipe_scr)[y[i]*width+i];
+		s = &((int16_t *)wipe_scr_start)[i*height];
+		d = &((int16_t *)wipe_scr)[y[i]*width+i];
 		idx = 0;
 		for (j=height-y[i];j;j--)
 		{
@@ -218,34 +218,34 @@ wipe_doMelt
 
 }
 
-int
+int32_t
 wipe_exitMelt
-( int	width,
-  int	height,
-  int	ticks )
+( int32_t	width,
+  int32_t	height,
+  int32_t	ticks )
 {
     Z_Free(y);
     return 0;
 }
 
-int
+int32_t
 wipe_StartScreen
-( int	x,
-  int	y,
-  int	width,
-  int	height )
+( int32_t	x,
+  int32_t	y,
+  int32_t	width,
+  int32_t	height )
 {
     wipe_scr_start = screens[2];
     I_ReadScreen(wipe_scr_start);
     return 0;
 }
 
-int
+int32_t
 wipe_EndScreen
-( int	x,
-  int	y,
-  int	width,
-  int	height )
+( int32_t	x,
+  int32_t	y,
+  int32_t	width,
+  int32_t	height )
 {
     wipe_scr_end = screens[3];
     I_ReadScreen(wipe_scr_end);
@@ -253,29 +253,29 @@ wipe_EndScreen
     return 0;
 }
 
-int
+int32_t
 wipe_ScreenWipe
-( int	wipeno,
-  int	x,
-  int	y,
-  int	width,
-  int	height,
-  int	ticks )
+( int32_t	wipeno,
+  int32_t	x,
+  int32_t	y,
+  int32_t	width,
+  int32_t	height,
+  int32_t	ticks )
 {
-    int rc;
-    static int (*wipes[])(int, int, int) =
+    int32_t rc;
+    static int32_t (*wipes[])(int32_t, int32_t, int32_t) =
     {
 	wipe_initColorXForm, wipe_doColorXForm, wipe_exitColorXForm,
 	wipe_initMelt, wipe_doMelt, wipe_exitMelt
     };
 
-    void V_MarkRect(int, int, int, int);
+    void V_MarkRect(int32_t, int32_t, int32_t, int32_t);
 
     // initial stuff
     if (!go)
     {
 	go = 1;
-	// wipe_scr = (byte *) Z_Malloc(width*height, PU_STATIC, 0); // DEBUG
+	// wipe_scr = (uint8_t *) Z_Malloc(width*height, PU_STATIC, 0); // DEBUG
 	wipe_scr = screens[0];
 	(*wipes[wipeno*3])(width, height, ticks);
     }

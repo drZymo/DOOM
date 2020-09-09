@@ -56,20 +56,20 @@
 //
 
 
-byte*		viewimage; 
-int		viewwidth;
-int		scaledviewwidth;
-int		viewheight;
-int		viewwindowx;
-int		viewwindowy; 
-byte*		ylookup[MAXHEIGHT]; 
-int		columnofs[MAXWIDTH]; 
+uint8_t*		viewimage; 
+int32_t		viewwidth;
+int32_t		scaledviewwidth;
+int32_t		viewheight;
+int32_t		viewwindowx;
+int32_t		viewwindowy; 
+uint8_t*		ylookup[MAXHEIGHT]; 
+int32_t		columnofs[MAXWIDTH]; 
 
 // Color tables for different players,
 //  translate a limited part to another
 //  (color ramps used for  suit colors).
 //
-byte		translations[3][256];	
+uint8_t		translations[3][256];	
  
  
 
@@ -79,17 +79,17 @@ byte		translations[3][256];
 // Source is the top of the column to scale.
 //
 lighttable_t*		dc_colormap; 
-int			dc_x; 
-int			dc_yl; 
-int			dc_yh; 
+int32_t			dc_x; 
+int32_t			dc_yl; 
+int32_t			dc_yh; 
 fixed_t			dc_iscale; 
 fixed_t			dc_texturemid;
 
 // first pixel in a column (possibly virtual) 
-byte*			dc_source;		
+uint8_t*			dc_source;		
 
 // just for profiling 
-int			dccount;
+int32_t			dccount;
 
 //
 // A column is a vertical slice/span from a wall texture that,
@@ -100,8 +100,8 @@ int			dccount;
 // 
 void R_DrawColumn (void) 
 { 
-    int			count; 
-    byte*		dest; 
+    int32_t			count; 
+    uint8_t*		dest; 
     fixed_t		frac;
     fixed_t		fracstep;	 
  
@@ -112,7 +112,7 @@ void R_DrawColumn (void)
 	return; 
 				 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH
+    if ((uint32_t)dc_x >= SCREENWIDTH
 	|| dc_yl < 0
 	|| dc_yh >= SCREENHEIGHT) 
 	I_Error ("R_DrawColumn: %i to %i at %i", dc_yl, dc_yh, dc_x); 
@@ -150,16 +150,16 @@ void R_DrawColumn (void)
 #if 0
 void R_DrawColumn (void) 
 { 
-    int			count; 
-    byte*		source;
-    byte*		dest;
-    byte*		colormap;
+    int32_t			count; 
+    uint8_t*		source;
+    uint8_t*		dest;
+    uint8_t*		colormap;
     
-    unsigned		frac;
-    unsigned		fracstep;
-    unsigned		fracstep2;
-    unsigned		fracstep3;
-    unsigned		fracstep4;	 
+    uint32_t		frac;
+    uint32_t		fracstep;
+    uint32_t		fracstep2;
+    uint32_t		fracstep3;
+    uint32_t		fracstep4;	 
  
     count = dc_yh - dc_yl + 1; 
 
@@ -206,9 +206,9 @@ void R_DrawColumn (void)
 
 void R_DrawColumnLow (void) 
 { 
-    int			count; 
-    byte*		dest; 
-    byte*		dest2;
+    int32_t			count; 
+    uint8_t*		dest; 
+    uint8_t*		dest2;
     fixed_t		frac;
     fixed_t		fracstep;	 
  
@@ -219,7 +219,7 @@ void R_DrawColumnLow (void)
 	return; 
 				 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH
+    if ((uint32_t)dc_x >= SCREENWIDTH
 	|| dc_yl < 0
 	|| dc_yh >= SCREENHEIGHT)
     {
@@ -256,7 +256,7 @@ void R_DrawColumnLow (void)
 #define FUZZOFF	(SCREENWIDTH)
 
 
-int	fuzzoffset[FUZZTABLE] =
+int32_t	fuzzoffset[FUZZTABLE] =
 {
     FUZZOFF,-FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF,FUZZOFF,-FUZZOFF,
     FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF,FUZZOFF,FUZZOFF,-FUZZOFF,
@@ -267,7 +267,7 @@ int	fuzzoffset[FUZZTABLE] =
     FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF,FUZZOFF,-FUZZOFF,FUZZOFF 
 }; 
 
-int	fuzzpos = 0; 
+int32_t	fuzzpos = 0; 
 
 
 //
@@ -280,8 +280,8 @@ int	fuzzpos = 0;
 //
 void R_DrawFuzzColumn (void) 
 { 
-    int			count; 
-    byte*		dest; 
+    int32_t			count; 
+    uint8_t*		dest; 
     fixed_t		frac;
     fixed_t		fracstep;	 
 
@@ -301,7 +301,7 @@ void R_DrawFuzzColumn (void)
 
     
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH
+    if ((uint32_t)dc_x >= SCREENWIDTH
 	|| dc_yl < 0 || dc_yh >= SCREENHEIGHT)
     {
 	I_Error ("R_DrawFuzzColumn: %i to %i at %i",
@@ -375,13 +375,13 @@ void R_DrawFuzzColumn (void)
 //  of the BaronOfHell, the HellKnight, uses
 //  identical sprites, kinda brightened up.
 //
-byte*	dc_translation;
-byte*	translationtables;
+uint8_t*	dc_translation;
+uint8_t*	translationtables;
 
 void R_DrawTranslatedColumn (void) 
 { 
-    int			count; 
-    byte*		dest; 
+    int32_t			count; 
+    uint8_t*		dest; 
     fixed_t		frac;
     fixed_t		fracstep;	 
  
@@ -390,7 +390,7 @@ void R_DrawTranslatedColumn (void)
 	return; 
 				 
 #ifdef RANGECHECK 
-    if ((unsigned)dc_x >= SCREENWIDTH
+    if ((uint32_t)dc_x >= SCREENWIDTH
 	|| dc_yl < 0
 	|| dc_yh >= SCREENHEIGHT)
     {
@@ -454,10 +454,10 @@ void R_DrawTranslatedColumn (void)
 //
 void R_InitTranslationTables (void)
 {
-    int		i;
+    int32_t		i;
 	
     translationtables = Z_Malloc (256*3+255, PU_STATIC, 0);
-    translationtables = (byte *)(( (int)translationtables + 255 )& ~255);
+    translationtables = (uint8_t *)(( (intptr_t)translationtables + 255 )& ~255);
     
     // translate just the 16 green colors
     for (i=0 ; i<256 ; i++)
@@ -493,9 +493,9 @@ void R_InitTranslationTables (void)
 // In consequence, flats are not stored by column (like walls),
 //  and the inner loop has to step in texture space u and v.
 //
-int			ds_y; 
-int			ds_x1; 
-int			ds_x2;
+int32_t			ds_y; 
+int32_t			ds_x1; 
+int32_t			ds_x2;
 
 lighttable_t*		ds_colormap; 
 
@@ -505,10 +505,10 @@ fixed_t			ds_xstep;
 fixed_t			ds_ystep;
 
 // start of a 64*64 tile image 
-byte*			ds_source;	
+uint8_t*			ds_source;	
 
 // just for profiling
-int			dscount;
+int32_t			dscount;
 
 
 //
@@ -517,15 +517,15 @@ void R_DrawSpan (void)
 { 
     fixed_t		xfrac;
     fixed_t		yfrac; 
-    byte*		dest; 
-    int			count;
-    int			spot; 
+    uint8_t*		dest; 
+    int32_t			count;
+    int32_t			spot; 
 	 
 #ifdef RANGECHECK 
     if (ds_x2 < ds_x1
 	|| ds_x1<0
 	|| ds_x2>=SCREENWIDTH  
-	|| (unsigned)ds_y>SCREENHEIGHT)
+	|| (uint32_t)ds_y>SCREENHEIGHT)
     {
 	I_Error( "R_DrawSpan: %i to %i at %i",
 		 ds_x1,ds_x2,ds_y);
@@ -565,18 +565,18 @@ void R_DrawSpan (void)
 #if 0
 void R_DrawSpan (void) 
 { 
-    unsigned	position, step;
+    uint32_t	position, step;
 
-    byte*	source;
-    byte*	colormap;
-    byte*	dest;
+    uint8_t*	source;
+    uint8_t*	colormap;
+    uint8_t*	dest;
     
-    unsigned	count;
+    uint32_t	count;
     usingned	spot; 
-    unsigned	value;
-    unsigned	temp;
-    unsigned	xtemp;
-    unsigned	ytemp;
+    uint32_t	value;
+    uint32_t	temp;
+    uint32_t	xtemp;
+    uint32_t	ytemp;
 		
     position = ((ds_xfrac<<10)&0xffff0000) | ((ds_yfrac>>6)&0xffff);
     step = ((ds_xstep<<10)&0xffff0000) | ((ds_ystep>>6)&0xffff);
@@ -640,15 +640,15 @@ void R_DrawSpanLow (void)
 { 
     fixed_t		xfrac;
     fixed_t		yfrac; 
-    byte*		dest; 
-    int			count;
-    int			spot; 
+    uint8_t*		dest; 
+    int32_t			count;
+    int32_t			spot; 
 	 
 #ifdef RANGECHECK 
     if (ds_x2 < ds_x1
 	|| ds_x1<0
 	|| ds_x2>=SCREENWIDTH  
-	|| (unsigned)ds_y>SCREENHEIGHT)
+	|| (uint32_t)ds_y>SCREENHEIGHT)
     {
 	I_Error( "R_DrawSpan: %i to %i at %i",
 		 ds_x1,ds_x2,ds_y);
@@ -690,10 +690,10 @@ void R_DrawSpanLow (void)
 //
 void
 R_InitBuffer
-( int		width,
-  int		height ) 
+( int32_t		width,
+  int32_t		height ) 
 { 
-    int		i; 
+    int32_t		i; 
 
     // Handle resize,
     //  e.g. smaller view windows
@@ -726,10 +726,10 @@ R_InitBuffer
 //
 void R_FillBackScreen (void) 
 { 
-    byte*	src;
-    byte*	dest; 
-    int		x;
-    int		y; 
+    uint8_t*	src;
+    uint8_t*	dest; 
+    int32_t		x;
+    int32_t		y; 
     patch_t*	patch;
 
     // DOOM border patch.
@@ -812,12 +812,12 @@ void R_FillBackScreen (void)
 //
 void
 R_VideoErase
-( unsigned	ofs,
-  int		count ) 
+( uint32_t	ofs,
+  int32_t		count ) 
 { 
   // LFB copy.
   // This might not be a good idea if memcpy
-  //  is not optiomal, e.g. byte by byte on
+  //  is not optiomal, e.g. uint8_t by uint8_t on
   //  a 32bit CPU, as GNU GCC/Linux libc did
   //  at one point.
     memcpy (screens[0]+ofs, screens[1]+ofs, count); 
@@ -831,17 +831,17 @@ R_VideoErase
 //
 void
 V_MarkRect
-( int		x,
-  int		y,
-  int		width,
-  int		height ); 
+( int32_t		x,
+  int32_t		y,
+  int32_t		width,
+  int32_t		height ); 
  
 void R_DrawViewBorder (void) 
 { 
-    int		top;
-    int		side;
-    int		ofs;
-    int		i; 
+    int32_t		top;
+    int32_t		side;
+    int32_t		ofs;
+    int32_t		i; 
  
     if (scaledviewwidth == SCREENWIDTH) 
 	return; 

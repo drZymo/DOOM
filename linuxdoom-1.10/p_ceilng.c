@@ -164,13 +164,13 @@ void T_MoveCeiling (ceiling_t* ceiling)
 // EV_DoCeiling
 // Move a ceiling up/down and all around!
 //
-int
+int32_t
 EV_DoCeiling
 ( line_t*	line,
   ceiling_e	type )
 {
-    int		secnum;
-    int		rtn;
+    int32_t		secnum;
+    int32_t		rtn;
     sector_t*	sec;
     ceiling_t*	ceiling;
 	
@@ -246,7 +246,7 @@ EV_DoCeiling
 //
 void P_AddActiveCeiling(ceiling_t* c)
 {
-    int		i;
+    int32_t		i;
     
     for (i = 0; i < MAXCEILINGS;i++)
     {
@@ -265,7 +265,7 @@ void P_AddActiveCeiling(ceiling_t* c)
 //
 void P_RemoveActiveCeiling(ceiling_t* c)
 {
-    int		i;
+    int32_t		i;
 	
     for (i = 0;i < MAXCEILINGS;i++)
     {
@@ -286,7 +286,7 @@ void P_RemoveActiveCeiling(ceiling_t* c)
 //
 void P_ActivateInStasisCeiling(line_t* line)
 {
-    int		i;
+    int32_t		i;
 	
     for (i = 0;i < MAXCEILINGS;i++)
     {
@@ -307,10 +307,10 @@ void P_ActivateInStasisCeiling(line_t* line)
 // EV_CeilingCrushStop
 // Stop a ceiling from crushing!
 //
-int	EV_CeilingCrushStop(line_t	*line)
+int32_t	EV_CeilingCrushStop(line_t	*line)
 {
-    int		i;
-    int		rtn;
+    int32_t		i;
+    int32_t		rtn;
 	
     rtn = 0;
     for (i = 0;i < MAXCEILINGS;i++)

@@ -45,14 +45,14 @@
 
 
 
-int	mb_used = 6;
+int32_t	mb_used = 6;
 
 
 void
 I_Tactile
-( int	on,
-  int	off,
-  int	total )
+( int32_t	on,
+  int32_t	off,
+  int32_t	total )
 {
   // UNUSED.
   on = off = total = 0;
@@ -65,15 +65,15 @@ ticcmd_t*	I_BaseTiccmd(void)
 }
 
 
-int  I_GetHeapSize (void)
+int32_t  I_GetHeapSize (void)
 {
     return mb_used*1024*1024;
 }
 
-byte* I_ZoneBase (int*	size)
+uint8_t* I_ZoneBase (int32_t*	size)
 {
     *size = mb_used*1024*1024;
-    return (byte *) malloc (*size);
+    return (uint8_t *) malloc (*size);
 }
 
 
@@ -82,12 +82,12 @@ byte* I_ZoneBase (int*	size)
 // I_GetTime
 // returns time in 1/70th second tics
 //
-int  I_GetTime (void)
+int32_t  I_GetTime (void)
 {
     struct timeval	tp;
     struct timezone	tzp;
-    int			newtics;
-    static int		basetime=0;
+    int32_t			newtics;
+    static int32_t		basetime=0;
   
     gettimeofday(&tp, &tzp);
     if (!basetime)
@@ -120,7 +120,7 @@ void I_Quit (void)
     exit(0);
 }
 
-void I_WaitVBL(int count)
+void I_WaitVBL(int32_t count)
 {
 #ifdef SGI
     sginap(1);                                           
@@ -141,11 +141,11 @@ void I_EndRead(void)
 {
 }
 
-byte*	I_AllocLow(int length)
+uint8_t*	I_AllocLow(int32_t length)
 {
-    byte*	mem;
+    uint8_t*	mem;
         
-    mem = (byte *)malloc (length);
+    mem = (uint8_t *)malloc (length);
     memset (mem,0,length);
     return mem;
 }

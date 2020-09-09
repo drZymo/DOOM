@@ -22,8 +22,9 @@
 
 
 #include <string.h>
+#include <stdint.h>
 
-int		myargc;
+int32_t		myargc;
 char**		myargv;
 
 
@@ -35,9 +36,9 @@ char**		myargv;
 // in the program's command line arguments.
 // Returns the argument number (1 to argc-1)
 // or 0 if not present
-int M_CheckParm (char *check)
+int32_t M_CheckParm (char *check)
 {
-    int		i;
+    int32_t		i;
 
     for (i = 1;i<myargc;i++)
     {

@@ -44,13 +44,13 @@ void I_InitMusic(void);
 
 void
 I_InitSound
-( int		samplerate,
-  int		samplesound );
+( int32_t		samplerate,
+  int32_t		samplesound );
 
 void
 I_SubmitOutputBuffer
 ( void*		samples,
-  int		samplecount );
+  int32_t		samplecount );
 
 void I_ShutdownSound(void);
 void I_ShutdownMusic(void);

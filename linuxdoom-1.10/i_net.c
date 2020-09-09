@@ -50,14 +50,14 @@
 
 // For some odd reason...
 #define ntohl(x) \
-        ((unsigned long int)((((unsigned long int)(x) & 0x000000ffU) << 24) | \
-                             (((unsigned long int)(x) & 0x0000ff00U) <<  8) | \
-                             (((unsigned long int)(x) & 0x00ff0000U) >>  8) | \
-                             (((unsigned long int)(x) & 0xff000000U) >> 24)))
+        ((uint32_t)((((uint32_t)(x) & 0x000000ffU) << 24) | \
+                             (((uint32_t)(x) & 0x0000ff00U) <<  8) | \
+                             (((uint32_t)(x) & 0x00ff0000U) >>  8) | \
+                             (((uint32_t)(x) & 0xff000000U) >> 24)))
 
 #define ntohs(x) \
-        ((unsigned short int)((((unsigned short int)(x) & 0x00ff) << 8) | \
-                              (((unsigned short int)(x) & 0xff00) >> 8))) \
+        ((uint16_t)((((uint16_t)(x) & 0x00ff) << 8) | \
+                              (((uint16_t)(x) & 0xff00) >> 8))) \
 	  
 #define htonl(x) ntohl(x)
 #define htons(x) ntohs(x)
@@ -70,10 +70,10 @@ boolean NetListen (void);
 // NETWORKING
 //
 
-int	DOOMPORT =	(IPPORT_USERRESERVED +0x1d );
+int32_t	DOOMPORT =	(IPPORT_USERRESERVED +0x1d );
 
-int			sendsocket;
-int			insocket;
+int32_t			sendsocket;
+int32_t			insocket;
 
 struct	sockaddr_in	sendaddress[MAXNETNODES];
 
@@ -84,9 +84,9 @@ void	(*netsend) (void);
 //
 // UDPsocket
 //
-int UDPsocket (void)
+int32_t UDPsocket (void)
 {
-    int	s;
+    int32_t	s;
 	
     // allocate a socket
     s = socket (PF_INET, SOCK_DGRAM, IPPROTO_UDP);
@@ -101,10 +101,10 @@ int UDPsocket (void)
 //
 void
 BindToLocalPort
-( int	s,
-  int	port )
+( int32_t	s,
+  int32_t	port )
 {
-    int			v;
+    int32_t			v;
     struct sockaddr_in	address;
 	
     memset (&address, 0, sizeof(address));
@@ -123,10 +123,10 @@ BindToLocalPort
 //
 void PacketSend (void)
 {
-    int		c;
+    int32_t		c;
     doomdata_t	sw;
 				
-    // byte swap
+    // uint8_t swap
     sw.checksum = htonl(netbuffer->checksum);
     sw.player = netbuffer->player;
     sw.retransmitfrom = netbuffer->retransmitfrom;
@@ -157,10 +157,10 @@ void PacketSend (void)
 //
 void PacketGet (void)
 {
-    int			i;
-    int			c;
+    int32_t			i;
+    int32_t			c;
     struct sockaddr_in	fromaddress;
-    int			fromlen;
+    socklen_t		fromlen;
     doomdata_t		sw;
 				
     fromlen = sizeof(fromaddress);
@@ -175,9 +175,9 @@ void PacketGet (void)
     }
 
     {
-	static int first=1;
+	static int32_t first=1;
 	if (first)
-	    printf("len=%d:p=[0x%x 0x%x] \n", c, *(int*)&sw, *((int*)&sw+1));
+	    printf("len=%d:p=[0x%x 0x%x] \n", c, *(int32_t*)&sw, *((int32_t*)&sw+1));
 	first = 0;
     }
 
@@ -196,7 +196,7 @@ void PacketGet (void)
     doomcom->remotenode = i;			// good packet from a game player
     doomcom->datalength = c;
 	
-    // byte swap
+    // uint8_t swap
     netbuffer->checksum = ntohl(sw.checksum);
     netbuffer->player = sw.player;
     netbuffer->retransmitfrom = sw.retransmitfrom;
@@ -216,11 +216,11 @@ void PacketGet (void)
 
 
 
-int GetLocalAddress (void)
+int32_t GetLocalAddress (void)
 {
     char		hostname[1024];
     struct hostent*	hostentry;	// host information entry
-    int			v;
+    int32_t			v;
 
     // get local address
     v = gethostname (hostname, sizeof(hostname));
@@ -231,7 +231,7 @@ int GetLocalAddress (void)
     if (!hostentry)
 	I_Error ("GetLocalAddress : gethostbyname: couldn't get local host");
 		
-    return *(int *)hostentry->h_addr_list[0];
+    return *(int32_t *)hostentry->h_addr_list[0];
 }
 
 
@@ -241,8 +241,8 @@ int GetLocalAddress (void)
 void I_InitNetwork (void)
 {
     boolean		trueval = true;
-    int			i;
-    int			p;
+    int32_t			i;
+    int32_t			p;
     struct hostent*	hostentry;	// host information entry
 	
     doomcom = malloc (sizeof (*doomcom) );
@@ -312,7 +312,7 @@ void I_InitNetwork (void)
 	    if (!hostentry)
 		I_Error ("gethostbyname: couldn't find %s", myargv[i]);
 	    sendaddress[doomcom->numnodes].sin_addr.s_addr 
-		= *(int *)hostentry->h_addr_list[0];
+		= *(int32_t *)hostentry->h_addr_list[0];
 	}
 	doomcom->numnodes++;
     }

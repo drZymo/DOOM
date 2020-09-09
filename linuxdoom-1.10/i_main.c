@@ -28,9 +28,9 @@
 #include "m_argv.h"
 #include "d_main.h"
 
-int
+int32_t
 main
-( int		argc,
+( int32_t		argc,
   char**	argv ) 
 { 
     myargc = argc; 

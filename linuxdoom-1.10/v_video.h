@@ -44,12 +44,12 @@
 
 
 
-extern	byte*		screens[5];
+extern	uint8_t*		screens[5];
 
-extern  int	dirtybox[4];
+extern  int32_t	dirtybox[4];
 
-extern	byte	gammatable[5][256];
-extern	int	usegamma;
+extern	uint8_t	gammatable[5][256];
+extern	int32_t	usegamma;
 
 
 
@@ -59,57 +59,57 @@ void V_Init (void);
 
 void
 V_CopyRect
-( int		srcx,
-  int		srcy,
-  int		srcscrn,
-  int		width,
-  int		height,
-  int		destx,
-  int		desty,
-  int		destscrn );
+( int32_t		srcx,
+  int32_t		srcy,
+  int32_t		srcscrn,
+  int32_t		width,
+  int32_t		height,
+  int32_t		destx,
+  int32_t		desty,
+  int32_t		destscrn );
 
 void
 V_DrawPatch
-( int		x,
-  int		y,
-  int		scrn,
+( int32_t		x,
+  int32_t		y,
+  int32_t		scrn,
   patch_t*	patch);
 
 void
 V_DrawPatchDirect
-( int		x,
-  int		y,
-  int		scrn,
+( int32_t		x,
+  int32_t		y,
+  int32_t		scrn,
   patch_t*	patch );
 
 
 // Draw a linear block of pixels into the view buffer.
 void
 V_DrawBlock
-( int		x,
-  int		y,
-  int		scrn,
-  int		width,
-  int		height,
-  byte*		src );
+( int32_t		x,
+  int32_t		y,
+  int32_t		scrn,
+  int32_t		width,
+  int32_t		height,
+  uint8_t*		src );
 
 // Reads a linear block of pixels into the view buffer.
 void
 V_GetBlock
-( int		x,
-  int		y,
-  int		scrn,
-  int		width,
-  int		height,
-  byte*		dest );
+( int32_t		x,
+  int32_t		y,
+  int32_t		scrn,
+  int32_t		width,
+  int32_t		height,
+  uint8_t*		dest );
 
 
 void
 V_MarkRect
-( int		x,
-  int		y,
-  int		width,
-  int		height );
+( int32_t		x,
+  int32_t		y,
+  int32_t		width,
+  int32_t		height );
 
 #endif
 //-----------------------------------------------------------------------------

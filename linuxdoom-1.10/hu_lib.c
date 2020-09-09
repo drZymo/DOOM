@@ -50,10 +50,10 @@ void HUlib_clearTextLine(hu_textline_t* t)
 void
 HUlib_initTextLine
 ( hu_textline_t*	t,
-  int			x,
-  int			y,
+  int32_t			x,
+  int32_t			y,
   patch_t**		f,
-  int			sc )
+  int32_t			sc )
 {
     t->x = x;
     t->y = y;
@@ -99,10 +99,10 @@ HUlib_drawTextLine
   boolean		drawcursor )
 {
 
-    int			i;
-    int			w;
-    int			x;
-    unsigned char	c;
+    int32_t			i;
+    int32_t			w;
+    int32_t			x;
+    uint8_t	c;
 
     // draw the new stuff
     x = l->x;
@@ -139,10 +139,9 @@ HUlib_drawTextLine
 // sorta called by HU_Erase and just better darn get things straight
 void HUlib_eraseTextLine(hu_textline_t* l)
 {
-    int			lh;
-    int			y;
-    int			yoffset;
-    static boolean	lastautomapactive = true;
+    int32_t			lh;
+    int32_t			y;
+    int32_t			yoffset;
 
     // Only erases when NOT in automap and the screen is reduced,
     // and the text must either need updating or refreshing
@@ -165,7 +164,6 @@ void HUlib_eraseTextLine(hu_textline_t* l)
 	}
     }
 
-    lastautomapactive = automapactive;
     if (l->needsupdate) l->needsupdate--;
 
 }
@@ -173,15 +171,15 @@ void HUlib_eraseTextLine(hu_textline_t* l)
 void
 HUlib_initSText
 ( hu_stext_t*	s,
-  int		x,
-  int		y,
-  int		h,
+  int32_t		x,
+  int32_t		y,
+  int32_t		h,
   patch_t**	font,
-  int		startchar,
+  int32_t		startchar,
   boolean*	on )
 {
 
-    int i;
+    int32_t i;
 
     s->h = h;
     s->on = on;
@@ -197,7 +195,7 @@ HUlib_initSText
 void HUlib_addLineToSText(hu_stext_t* s)
 {
 
-    int i;
+    int32_t i;
 
     // add a clear line
     if (++s->cl == s->h)
@@ -227,7 +225,7 @@ HUlib_addMessageToSText
 
 void HUlib_drawSText(hu_stext_t* s)
 {
-    int i, idx;
+    int32_t i, idx;
     hu_textline_t *l;
 
     if (!*s->on)
@@ -251,7 +249,7 @@ void HUlib_drawSText(hu_stext_t* s)
 void HUlib_eraseSText(hu_stext_t* s)
 {
 
-    int i;
+    int32_t i;
 
     for (i=0 ; i<s->h ; i++)
     {
@@ -266,10 +264,10 @@ void HUlib_eraseSText(hu_stext_t* s)
 void
 HUlib_initIText
 ( hu_itext_t*	it,
-  int		x,
-  int		y,
+  int32_t		x,
+  int32_t		y,
   patch_t**	font,
-  int		startchar,
+  int32_t		startchar,
   boolean*	on )
 {
     it->lm = 0; // default left margin is start of text
@@ -314,7 +312,7 @@ HUlib_addPrefixToIText
 boolean
 HUlib_keyInIText
 ( hu_itext_t*	it,
-  unsigned char ch )
+  uint8_t ch )
 {
 
     if (ch >= ' ' && ch <= '_') 

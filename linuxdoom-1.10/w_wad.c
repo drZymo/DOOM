@@ -54,7 +54,7 @@
 
 // Location of each lump on disk.
 lumpinfo_t*		lumpinfo;		
-int			numlumps;
+int32_t			numlumps;
 
 void**			lumpcache;
 
@@ -66,7 +66,7 @@ void strupr (char* s)
     while (*s) { *s = toupper(*s); s++; }
 }
 
-int filelength (int handle) 
+int32_t filelength (int32_t handle) 
 { 
     struct stat	fileinfo;
     
@@ -83,7 +83,7 @@ ExtractFileBase
   char*		dest )
 {
     char*	src;
-    int		length;
+    int32_t		length;
 
     src = path + strlen(path) - 1;
     
@@ -104,7 +104,7 @@ ExtractFileBase
 	if (++length == 9)
 	    I_Error ("Filename base of %s >8 chars",path);
 
-	*dest++ = toupper((int)*src++);
+	*dest++ = toupper((int32_t)*src++);
     }
 }
 
@@ -129,7 +129,7 @@ ExtractFileBase
 //  specially to allow map reloads.
 // But: the reload feature is a fragile hack...
 
-int			reloadlump;
+int32_t			reloadlump;
 char*			reloadname;
 
 
@@ -137,13 +137,13 @@ void W_AddFile (char *filename)
 {
     wadinfo_t		header;
     lumpinfo_t*		lump_p;
-    unsigned		i;
-    int			handle;
-    int			length;
-    int			startlump;
+    uint32_t		i;
+    int32_t			handle;
+    int32_t			length;
+    int32_t			startlump;
     filelump_t*		fileinfo;
     filelump_t		singleinfo;
-    int			storehandle;
+    int32_t			storehandle;
     
     // open the file and add to directory
 
@@ -231,11 +231,11 @@ void W_AddFile (char *filename)
 void W_Reload (void)
 {
     wadinfo_t		header;
-    int			lumpcount;
+    int32_t			lumpcount;
     lumpinfo_t*		lump_p;
-    unsigned		i;
-    int			handle;
-    int			length;
+    uint32_t		i;
+    int32_t			handle;
+    int32_t			length;
     filelump_t*		fileinfo;
 	
     if (!reloadname)
@@ -286,7 +286,7 @@ void W_Reload (void)
 //
 void W_InitMultipleFiles (char** filenames)
 {	
-    int		size;
+    int32_t		size;
     
     // open all the files, load headers, and count lumps
     numlumps = 0;
@@ -331,7 +331,7 @@ void W_InitFile (char* filename)
 //
 // W_NumLumps
 //
-int W_NumLumps (void)
+int32_t W_NumLumps (void)
 {
     return numlumps;
 }
@@ -343,16 +343,16 @@ int W_NumLumps (void)
 // Returns -1 if name not found.
 //
 
-int W_CheckNumForName (char* name)
+int32_t W_CheckNumForName (char* name)
 {
     union {
 	char	s[9];
-	int	x[2];
+	int32_t	x[2];
 	
     } name8;
     
-    int		v1;
-    int		v2;
+    int32_t		v1;
+    int32_t		v2;
     lumpinfo_t*	lump_p;
 
     // make the name into two integers for easy compares
@@ -373,8 +373,8 @@ int W_CheckNumForName (char* name)
 
     while (lump_p-- != lumpinfo)
     {
-	if ( *(int *)lump_p->name == v1
-	     && *(int *)&lump_p->name[4] == v2)
+	if ( *(int32_t *)lump_p->name == v1
+	     && *(int32_t *)&lump_p->name[4] == v2)
 	{
 	    return lump_p - lumpinfo;
 	}
@@ -391,9 +391,9 @@ int W_CheckNumForName (char* name)
 // W_GetNumForName
 // Calls W_CheckNumForName, but bombs out if not found.
 //
-int W_GetNumForName (char* name)
+int32_t W_GetNumForName (char* name)
 {
-    int	i;
+    int32_t	i;
 
     i = W_CheckNumForName (name);
     
@@ -408,7 +408,7 @@ int W_GetNumForName (char* name)
 // W_LumpLength
 // Returns the buffer size needed to load the given lump.
 //
-int W_LumpLength (int lump)
+int32_t W_LumpLength (int32_t lump)
 {
     if (lump >= numlumps)
 	I_Error ("W_LumpLength: %i >= numlumps",lump);
@@ -425,12 +425,12 @@ int W_LumpLength (int lump)
 //
 void
 W_ReadLump
-( int		lump,
+( int32_t		lump,
   void*		dest )
 {
-    int		c;
+    int32_t		c;
     lumpinfo_t*	l;
-    int		handle;
+    int32_t		handle;
 	
     if (lump >= numlumps)
 	I_Error ("W_ReadLump: %i >= numlumps",lump);
@@ -469,12 +469,10 @@ W_ReadLump
 //
 void*
 W_CacheLumpNum
-( int		lump,
-  int		tag )
+( int32_t		lump,
+  int32_t		tag )
 {
-    byte*	ptr;
-
-    if ((unsigned)lump >= numlumps)
+    if ((uint32_t)lump >= numlumps)
 	I_Error ("W_CacheLumpNum: %i >= numlumps",lump);
 		
     if (!lumpcache[lump])
@@ -482,7 +480,7 @@ W_CacheLumpNum
 	// read the lump in
 	
 	//printf ("cache miss on lump %i\n",lump);
-	ptr = Z_Malloc (W_LumpLength (lump), tag, &lumpcache[lump]);
+	Z_Malloc (W_LumpLength (lump), tag, &lumpcache[lump]);
 	W_ReadLump (lump, lumpcache[lump]);
     }
     else
@@ -502,7 +500,7 @@ W_CacheLumpNum
 void*
 W_CacheLumpName
 ( char*		name,
-  int		tag )
+  int32_t		tag )
 {
     return W_CacheLumpNum (W_GetNumForName(name), tag);
 }
@@ -511,17 +509,17 @@ W_CacheLumpName
 //
 // W_Profile
 //
-int		info[2500][10];
-int		profilecount;
+int32_t		info[2500][10];
+int32_t		profilecount;
 
 void W_Profile (void)
 {
-    int		i;
+    int32_t		i;
     memblock_t*	block;
     void*	ptr;
     char	ch;
     FILE*	f;
-    int		j;
+    int32_t		j;
     char	name[9];
 	
 	
@@ -535,7 +533,7 @@ void W_Profile (void)
 	}
 	else
 	{
-	    block = (memblock_t *) ( (byte *)ptr - sizeof(memblock_t));
+	    block = (memblock_t *) ( (uint8_t *)ptr - sizeof(memblock_t));
 	    if (block->tag < PU_PURGELEVEL)
 		ch = 'S';
 	    else

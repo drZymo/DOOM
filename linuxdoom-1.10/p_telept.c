@@ -39,17 +39,17 @@
 //
 // TELEPORTATION
 //
-int
+int32_t
 EV_Teleport
 ( line_t*	line,
-  int		side,
+  int32_t		side,
   mobj_t*	thing )
 {
-    int		i;
-    int		tag;
+    int32_t		i;
+    int32_t		tag;
     mobj_t*	m;
     mobj_t*	fog;
-    unsigned	an;
+    uint32_t	an;
     thinker_t*	thinker;
     sector_t*	sector;
     fixed_t	oldx;

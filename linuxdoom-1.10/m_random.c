@@ -21,12 +21,13 @@
 //
 //-----------------------------------------------------------------------------
 
+#include <stdint.h>
 
 //
 // M_Random
 // Returns a 0-255 number
 //
-unsigned char rndtable[256] = {
+uint8_t rndtable[256] = {
     0,   8, 109, 220, 222, 241, 149, 107,  75, 248, 254, 140,  16,  66 ,
     74,  21, 211,  47,  80, 242, 154,  27, 205, 128, 161,  89,  77,  36 ,
     95, 110,  85,  48, 212, 140, 211, 249,  22,  79, 200,  50,  28, 188 ,
@@ -48,17 +49,17 @@ unsigned char rndtable[256] = {
     120, 163, 236, 249
 };
 
-int	rndindex = 0;
-int	prndindex = 0;
+int32_t	rndindex = 0;
+int32_t	prndindex = 0;
 
 // Which one is deterministic?
-int P_Random (void)
+int32_t P_Random (void)
 {
     prndindex = (prndindex+1)&0xff;
     return rndtable[prndindex];
 }
 
-int M_Random (void)
+int32_t M_Random (void)
 {
     rndindex = (rndindex+1)&0xff;
     return rndtable[rndindex];

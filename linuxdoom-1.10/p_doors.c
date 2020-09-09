@@ -199,7 +199,7 @@ void T_VerticalDoor (vldoor_t* door)
 // Move a locked door up/down
 //
 
-int
+int32_t
 EV_DoLockedDoor
 ( line_t*	line,
   vldoor_e	type,
@@ -256,12 +256,12 @@ EV_DoLockedDoor
 }
 
 
-int
+int32_t
 EV_DoDoor
 ( line_t*	line,
   vldoor_e	type )
 {
-    int		secnum,rtn;
+    int32_t		secnum,rtn;
     sector_t*	sec;
     vldoor_t*	door;
 	
@@ -352,10 +352,9 @@ EV_VerticalDoor
   mobj_t*	thing )
 {
     player_t*	player;
-    int		secnum;
     sector_t*	sec;
     vldoor_t*	door;
-    int		side;
+    int32_t		side;
 	
     side = 0;	// only front sides can be used
 
@@ -407,7 +406,6 @@ EV_VerticalDoor
 	
     // if the sector has an active thinker, use it
     sec = sides[ line->sidenum[side^1]] .sector;
-    secnum = sec-sectors;
 
     if (sec->specialdata)
     {
@@ -523,7 +521,7 @@ void P_SpawnDoorCloseIn30 (sector_t* sec)
 void
 P_SpawnDoorRaiseIn5Mins
 ( sector_t*	sec,
-  int		secnum )
+  int32_t		secnum )
 {
     vldoor_t*	door;
 	
@@ -561,11 +559,11 @@ slideframe_t slideFrames[MAXSLIDEDOORS];
 
 void P_InitSlidingDoorFrames(void)
 {
-    int		i;
-    int		f1;
-    int		f2;
-    int		f3;
-    int		f4;
+    int32_t		i;
+    int32_t		f1;
+    int32_t		f2;
+    int32_t		f3;
+    int32_t		f4;
 	
     // DOOM II ONLY...
     if ( gamemode != commercial)
@@ -603,10 +601,10 @@ void P_InitSlidingDoorFrames(void)
 // Return index into "slideFrames" array
 // for which door type to use
 //
-int P_FindSlidingDoorType(line_t*	line)
+int32_t P_FindSlidingDoorType(line_t*	line)
 {
-    int		i;
-    int		val;
+    int32_t		i;
+    int32_t		val;
 	
     for (i = 0;i < MAXSLIDEDOORS;i++)
     {

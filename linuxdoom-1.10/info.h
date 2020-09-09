@@ -24,6 +24,8 @@
 #ifndef __INFO__
 #define __INFO__
 
+#include <stdint.h>
+
 // Needed for action function pointer handling.
 #include "d_think.h"
 
@@ -1147,12 +1149,12 @@ typedef enum
 typedef struct
 {
   spritenum_t	sprite;
-  long			frame;
-  long			tics;
+  int32_t			frame;
+  int32_t			tics;
   // void		(*action) ();
   actionf_t			action;
   statenum_t			nextstate;
-  long			misc1, misc2;
+  int32_t			misc1, misc2;
 } state_t;
 
 extern state_t	states[NUMSTATES];
@@ -1304,29 +1306,29 @@ typedef enum {
 
 typedef struct
 {
-    int	doomednum;
-    int	spawnstate;
-    int	spawnhealth;
-    int	seestate;
-    int	seesound;
-    int	reactiontime;
-    int	attacksound;
-    int	painstate;
-    int	painchance;
-    int	painsound;
-    int	meleestate;
-    int	missilestate;
-    int	deathstate;
-    int	xdeathstate;
-    int	deathsound;
-    int	speed;
-    int	radius;
-    int	height;
-    int	mass;
-    int	damage;
-    int	activesound;
-    int	flags;
-    int	raisestate;
+    int32_t	doomednum;
+    int32_t	spawnstate;
+    int32_t	spawnhealth;
+    int32_t	seestate;
+    int32_t	seesound;
+    int32_t	reactiontime;
+    int32_t	attacksound;
+    int32_t	painstate;
+    int32_t	painchance;
+    int32_t	painsound;
+    int32_t	meleestate;
+    int32_t	missilestate;
+    int32_t	deathstate;
+    int32_t	xdeathstate;
+    int32_t	deathsound;
+    int32_t	speed;
+    int32_t	radius;
+    int32_t	height;
+    int32_t	mass;
+    int32_t	damage;
+    int32_t	activesound;
+    int32_t	flags;
+    int32_t	raisestate;
 
 } mobjinfo_t;
 

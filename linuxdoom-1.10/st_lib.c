@@ -61,12 +61,12 @@ void STlib_init(void)
 void
 STlib_initNum
 ( st_number_t*		n,
-  int			x,
-  int			y,
+  int32_t			x,
+  int32_t			y,
   patch_t**		pl,
-  int*			num,
+  int32_t*			num,
   boolean*		on,
-  int			width )
+  int32_t			width )
 {
     n->x	= x;
     n->y	= y;
@@ -89,14 +89,14 @@ STlib_drawNum
   boolean	refresh )
 {
 
-    int		numdigits = n->width;
-    int		num = *n->num;
+    int32_t		numdigits = n->width;
+    int32_t		num = *n->num;
     
-    int		w = SHORT(n->p[0]->width);
-    int		h = SHORT(n->p[0]->height);
-    int		x = n->x;
+    int32_t		w = SHORT(n->p[0]->width);
+    int32_t		h = SHORT(n->p[0]->height);
+    int32_t		x = n->x;
     
-    int		neg;
+    int32_t		neg;
 
     n->oldnum = *n->num;
 
@@ -158,10 +158,10 @@ STlib_updateNum
 void
 STlib_initPercent
 ( st_percent_t*		p,
-  int			x,
-  int			y,
+  int32_t			x,
+  int32_t			y,
   patch_t**		pl,
-  int*			num,
+  int32_t*			num,
   boolean*		on,
   patch_t*		percent )
 {
@@ -175,7 +175,7 @@ STlib_initPercent
 void
 STlib_updatePercent
 ( st_percent_t*		per,
-  int			refresh )
+  int32_t			refresh )
 {
     if (refresh && *per->n.on)
 	V_DrawPatch(per->n.x, per->n.y, FG, per->p);
@@ -188,10 +188,10 @@ STlib_updatePercent
 void
 STlib_initMultIcon
 ( st_multicon_t*	i,
-  int			x,
-  int			y,
+  int32_t			x,
+  int32_t			y,
   patch_t**		il,
-  int*			inum,
+  int32_t*			inum,
   boolean*		on )
 {
     i->x	= x;
@@ -209,10 +209,10 @@ STlib_updateMultIcon
 ( st_multicon_t*	mi,
   boolean		refresh )
 {
-    int			w;
-    int			h;
-    int			x;
-    int			y;
+    int32_t			w;
+    int32_t			h;
+    int32_t			x;
+    int32_t			y;
 
     if (*mi->on
 	&& (mi->oldinum != *mi->inum || refresh)
@@ -240,8 +240,8 @@ STlib_updateMultIcon
 void
 STlib_initBinIcon
 ( st_binicon_t*		b,
-  int			x,
-  int			y,
+  int32_t			x,
+  int32_t			y,
   patch_t*		i,
   boolean*		val,
   boolean*		on )
@@ -261,10 +261,10 @@ STlib_updateBinIcon
 ( st_binicon_t*		bi,
   boolean		refresh )
 {
-    int			x;
-    int			y;
-    int			w;
-    int			h;
+    int32_t			x;
+    int32_t			y;
+    int32_t			w;
+    int32_t			h;
 
     if (*bi->on
 	&& (bi->oldval != *bi->val || refresh))

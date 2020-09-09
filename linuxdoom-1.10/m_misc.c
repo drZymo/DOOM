@@ -63,15 +63,15 @@
 //
 extern patch_t*		hu_font[HU_FONTSIZE];
 
-int
+int32_t
 M_DrawText
-( int		x,
-  int		y,
+( int32_t		x,
+  int32_t		y,
   boolean	direct,
   char*		string )
 {
-    int 	c;
-    int		w;
+    int32_t 	c;
+    int32_t		w;
 
     while (*string)
     {
@@ -110,10 +110,10 @@ boolean
 M_WriteFile
 ( char const*	name,
   void*		source,
-  int		length )
+  int32_t		length )
 {
-    int		handle;
-    int		count;
+    int32_t		handle;
+    int32_t		count;
 	
     handle = open ( name, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
 
@@ -133,14 +133,14 @@ M_WriteFile
 //
 // M_ReadFile
 //
-int
+int32_t
 M_ReadFile
 ( char const*	name,
-  byte**	buffer )
+  uint8_t**	buffer )
 {
-    int	handle, count, length;
+    int32_t	handle, count, length;
     struct stat	fileinfo;
-    byte		*buf;
+    uint8_t		*buf;
 	
     handle = open (name, O_RDONLY | O_BINARY, 0666);
     if (handle == -1)
@@ -163,57 +163,45 @@ M_ReadFile
 //
 // DEFAULTS
 //
-int		usemouse;
-int		usejoystick;
+int32_t		usemouse;
+int32_t		usejoystick;
 
-extern int	key_right;
-extern int	key_left;
-extern int	key_up;
-extern int	key_down;
+extern int32_t	key_right;
+extern int32_t	key_left;
+extern int32_t	key_up;
+extern int32_t	key_down;
 
-extern int	key_strafeleft;
-extern int	key_straferight;
+extern int32_t	key_strafeleft;
+extern int32_t	key_straferight;
 
-extern int	key_fire;
-extern int	key_use;
-extern int	key_strafe;
-extern int	key_speed;
+extern int32_t	key_fire;
+extern int32_t	key_use;
+extern int32_t	key_strafe;
+extern int32_t	key_speed;
 
-extern int	mousebfire;
-extern int	mousebstrafe;
-extern int	mousebforward;
+extern int32_t	mousebfire;
+extern int32_t	mousebstrafe;
+extern int32_t	mousebforward;
 
-extern int	joybfire;
-extern int	joybstrafe;
-extern int	joybuse;
-extern int	joybspeed;
+extern int32_t	joybfire;
+extern int32_t	joybstrafe;
+extern int32_t	joybuse;
+extern int32_t	joybspeed;
 
-extern int	viewwidth;
-extern int	viewheight;
+extern int32_t	viewwidth;
+extern int32_t	viewheight;
 
-extern int	mouseSensitivity;
-extern int	showMessages;
+extern int32_t	mouseSensitivity;
+extern int32_t	showMessages;
 
-extern int	detailLevel;
+extern int32_t	detailLevel;
 
-extern int	screenblocks;
+extern int32_t	screenblocks;
 
-extern int	showMessages;
+extern int32_t	showMessages;
 
 // machine-independent sound params
-extern	int	numChannels;
-
-
-// UNIX hack, to be removed.
-#ifdef SNDSERV
-extern char*	sndserver_filename;
-extern int	mb_used;
-#endif
-
-#ifdef LINUX
-char*		mousetype;
-char*		mousedev;
-#endif
+extern	int32_t	numChannels;
 
 extern char*	chat_macros[];
 
@@ -222,10 +210,8 @@ extern char*	chat_macros[];
 typedef struct
 {
     char*	name;
-    int*	location;
-    int		defaultvalue;
-    int		scantranslate;		// PC scan code hack
-    int		untranslated;		// lousy hack
+    int32_t*	location;
+    int32_t		defaultvalue;
 } default_t;
 
 default_t	defaults[] =
@@ -249,17 +235,6 @@ default_t	defaults[] =
     {"key_strafe",&key_strafe, KEY_RALT},
     {"key_speed",&key_speed, KEY_RSHIFT},
 
-// UNIX hack, to be removed. 
-#ifdef SNDSERV
-    {"sndserver", (int *) &sndserver_filename, (int) "sndserver"},
-    {"mb_used", &mb_used, 2},
-#endif
-    
-#endif
-
-#ifdef LINUX
-    {"mousedev", (int*)&mousedev, (int)"/dev/ttyS0"},
-    {"mousetype", (int*)&mousetype, (int)"microsoft"},
 #endif
 
     {"use_mouse",&usemouse, 1},
@@ -282,20 +257,21 @@ default_t	defaults[] =
 
     {"usegamma",&usegamma, 0},
 
-    {"chatmacro0", (int *) &chat_macros[0], (int) HUSTR_CHATMACRO0 },
-    {"chatmacro1", (int *) &chat_macros[1], (int) HUSTR_CHATMACRO1 },
-    {"chatmacro2", (int *) &chat_macros[2], (int) HUSTR_CHATMACRO2 },
-    {"chatmacro3", (int *) &chat_macros[3], (int) HUSTR_CHATMACRO3 },
-    {"chatmacro4", (int *) &chat_macros[4], (int) HUSTR_CHATMACRO4 },
-    {"chatmacro5", (int *) &chat_macros[5], (int) HUSTR_CHATMACRO5 },
-    {"chatmacro6", (int *) &chat_macros[6], (int) HUSTR_CHATMACRO6 },
-    {"chatmacro7", (int *) &chat_macros[7], (int) HUSTR_CHATMACRO7 },
-    {"chatmacro8", (int *) &chat_macros[8], (int) HUSTR_CHATMACRO8 },
-    {"chatmacro9", (int *) &chat_macros[9], (int) HUSTR_CHATMACRO9 }
+    // TODO: causes 'error: initializer element is not constant'
+    // {"chatmacro0", (int32_t *) &chat_macros[0], (int32_t) HUSTR_CHATMACRO0 },
+    // {"chatmacro1", (int32_t *) &chat_macros[1], (int32_t) HUSTR_CHATMACRO1 },
+    // {"chatmacro2", (int32_t *) &chat_macros[2], (int32_t) HUSTR_CHATMACRO2 },
+    // {"chatmacro3", (int32_t *) &chat_macros[3], (int32_t) HUSTR_CHATMACRO3 },
+    // {"chatmacro4", (int32_t *) &chat_macros[4], (int32_t) HUSTR_CHATMACRO4 },
+    // {"chatmacro5", (int32_t *) &chat_macros[5], (int32_t) HUSTR_CHATMACRO5 },
+    // {"chatmacro6", (int32_t *) &chat_macros[6], (int32_t) HUSTR_CHATMACRO6 },
+    // {"chatmacro7", (int32_t *) &chat_macros[7], (int32_t) HUSTR_CHATMACRO7 },
+    // {"chatmacro8", (int32_t *) &chat_macros[8], (int32_t) HUSTR_CHATMACRO8 },
+    // {"chatmacro9", (int32_t *) &chat_macros[9], (int32_t) HUSTR_CHATMACRO9 }
 
 };
 
-int	numdefaults;
+int32_t	numdefaults;
 char*	defaultfile;
 
 
@@ -304,8 +280,8 @@ char*	defaultfile;
 //
 void M_SaveDefaults (void)
 {
-    int		i;
-    int		v;
+    int32_t		i;
+    int32_t		v;
     FILE*	f;
 	
     f = fopen (defaultfile, "w");
@@ -332,17 +308,17 @@ void M_SaveDefaults (void)
 //
 // M_LoadDefaults
 //
-extern byte	scantokey[128];
+extern uint8_t	scantokey[128];
 
 void M_LoadDefaults (void)
 {
-    int		i;
-    int		len;
+    int32_t		i;
+    int32_t		len;
     FILE*	f;
     char	def[80];
     char	strparm[100];
     char*	newstring;
-    int		parm;
+    int32_t		parm;
     boolean	isstring;
     
     // set everything to base values
@@ -387,9 +363,10 @@ void M_LoadDefaults (void)
 		    {
 			if (!isstring)
 			    *defaults[i].location = parm;
-			else
-			    *defaults[i].location =
-				(int) newstring;
+			//TODO: not supported
+            //else
+			//    *defaults[i].location =
+			//	(int32_t) newstring;
 			break;
 		    }
 	    }
@@ -412,23 +389,23 @@ typedef struct
     char		encoding;
     char		bits_per_pixel;
 
-    unsigned short	xmin;
-    unsigned short	ymin;
-    unsigned short	xmax;
-    unsigned short	ymax;
+    uint16_t	xmin;
+    uint16_t	ymin;
+    uint16_t	xmax;
+    uint16_t	ymax;
     
-    unsigned short	hres;
-    unsigned short	vres;
+    uint16_t	hres;
+    uint16_t	vres;
 
-    unsigned char	palette[48];
+    uint8_t	palette[48];
     
     char		reserved;
     char		color_planes;
-    unsigned short	bytes_per_line;
-    unsigned short	palette_type;
+    uint16_t	bytes_per_line;
+    uint16_t	palette_type;
     
     char		filler[58];
-    unsigned char	data;		// unbounded
+    uint8_t	data;		// unbounded
 } pcx_t;
 
 
@@ -438,15 +415,15 @@ typedef struct
 void
 WritePCXfile
 ( char*		filename,
-  byte*		data,
-  int		width,
-  int		height,
-  byte*		palette )
+  uint8_t*		data,
+  int32_t		width,
+  int32_t		height,
+  uint8_t*		palette )
 {
-    int		i;
-    int		length;
+    int32_t		i;
+    int32_t		length;
     pcx_t*	pcx;
-    byte*	pack;
+    uint8_t*	pack;
 	
     pcx = Z_Malloc (width*height*2+1000, PU_STATIC, NULL);
 
@@ -482,12 +459,12 @@ WritePCXfile
     }
     
     // write the palette
-    *pack++ = 0x0c;	// palette ID byte
+    *pack++ = 0x0c;	// palette ID uint8_t
     for (i=0 ; i<768 ; i++)
 	*pack++ = *palette++;
     
     // write output file
-    length = pack - (byte *)pcx;
+    length = pack - (uint8_t *)pcx;
     M_WriteFile (filename, pcx, length);
 
     Z_Free (pcx);
@@ -499,8 +476,8 @@ WritePCXfile
 //
 void M_ScreenShot (void)
 {
-    int		i;
-    byte*	linear;
+    int32_t		i;
+    uint8_t*	linear;
     char	lbmname[12];
     
     // munge planar buffer to linear

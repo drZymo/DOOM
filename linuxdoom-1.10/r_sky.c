@@ -40,9 +40,9 @@
 //
 // sky mapping
 //
-int			skyflatnum;
-int			skytexture;
-int			skytexturemid;
+int32_t			skyflatnum;
+int32_t			skytexture;
+int32_t			skytexturemid;
 
 
 

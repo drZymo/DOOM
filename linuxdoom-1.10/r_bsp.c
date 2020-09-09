@@ -51,8 +51,8 @@ drawseg_t*	ds_p;
 
 void
 R_StoreWallRange
-( int	start,
-  int	stop );
+( int32_t	start,
+  int32_t	stop );
 
 
 
@@ -74,8 +74,8 @@ void R_ClearDrawSegs (void)
 //
 typedef	struct
 {
-    int	first;
-    int last;
+    int32_t	first;
+    int32_t last;
     
 } cliprange_t;
 
@@ -97,8 +97,8 @@ cliprange_t	solidsegs[MAXSEGS];
 // 
 void
 R_ClipSolidWallSegment
-( int			first,
-  int			last )
+( int32_t			first,
+  int32_t			last )
 {
     cliprange_t*	next;
     cliprange_t*	start;
@@ -190,8 +190,8 @@ R_ClipSolidWallSegment
 //
 void
 R_ClipPassWallSegment
-( int	first,
-  int	last )
+( int32_t	first,
+  int32_t	last )
 {
     cliprange_t*	start;
 
@@ -253,8 +253,8 @@ void R_ClearClipSegs (void)
 //
 void R_AddLine (seg_t*	line)
 {
-    int			x1;
-    int			x2;
+    int32_t			x1;
+    int32_t			x2;
     angle_t		angle1;
     angle_t		angle2;
     angle_t		span;
@@ -357,7 +357,7 @@ void R_AddLine (seg_t*	line)
 // Returns true
 //  if some part of the bbox might be visible.
 //
-int	checkcoord[12][4] =
+int32_t	checkcoord[12][4] =
 {
     {3,0,2,1},
     {3,0,2,0},
@@ -375,9 +375,9 @@ int	checkcoord[12][4] =
 
 boolean R_CheckBBox (fixed_t*	bspcoord)
 {
-    int			boxx;
-    int			boxy;
-    int			boxpos;
+    int32_t			boxx;
+    int32_t			boxy;
+    int32_t			boxpos;
 
     fixed_t		x1;
     fixed_t		y1;
@@ -391,8 +391,8 @@ boolean R_CheckBBox (fixed_t*	bspcoord)
     
     cliprange_t*	start;
 
-    int			sx1;
-    int			sx2;
+    int32_t			sx1;
+    int32_t			sx2;
     
     // Find the corners of the box
     // that define the edges from current viewpoint.
@@ -489,9 +489,9 @@ boolean R_CheckBBox (fixed_t*	bspcoord)
 // Add sprites of things in sector.
 // Draw one or more line segments.
 //
-void R_Subsector (int num)
+void R_Subsector (int32_t num)
 {
-    int			count;
+    int32_t			count;
     seg_t*		line;
     subsector_t*	sub;
 	
@@ -544,10 +544,10 @@ void R_Subsector (int num)
 // Renders all subsectors below a given node,
 //  traversing subtree recursively.
 // Just call with BSP root.
-void R_RenderBSPNode (int bspnum)
+void R_RenderBSPNode (int32_t bspnum)
 {
     node_t*	bsp;
-    int		side;
+    int32_t		side;
 
     // Found a subsector?
     if (bspnum & NF_SUBSECTOR)

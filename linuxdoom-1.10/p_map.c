@@ -42,7 +42,7 @@
 
 fixed_t		tmbbox[4];
 mobj_t*		tmthing;
-int		tmflags;
+int32_t		tmflags;
 fixed_t		tmx;
 fixed_t		tmy;
 
@@ -64,7 +64,7 @@ line_t*		ceilingline;
 #define MAXSPECIALCROSS		8
 
 line_t*		spechit[MAXSPECIALCROSS];
-int		numspechit;
+int32_t		numspechit;
 
 
 
@@ -114,12 +114,12 @@ P_TeleportMove
   fixed_t	x,
   fixed_t	y )
 {
-    int			xl;
-    int			xh;
-    int			yl;
-    int			yh;
-    int			bx;
-    int			by;
+    int32_t			xl;
+    int32_t			xh;
+    int32_t			yl;
+    int32_t			yh;
+    int32_t			bx;
+    int32_t			by;
     
     subsector_t*	newsubsec;
     
@@ -250,7 +250,7 @@ boolean PIT_CheckThing (mobj_t* thing)
 {
     fixed_t		blockdist;
     boolean		solid;
-    int			damage;
+    int32_t			damage;
 		
     if (!(thing->flags & (MF_SOLID|MF_SPECIAL|MF_SHOOTABLE) ))
 	return true;
@@ -374,12 +374,12 @@ P_CheckPosition
   fixed_t	x,
   fixed_t	y )
 {
-    int			xl;
-    int			xh;
-    int			yl;
-    int			yh;
-    int			bx;
-    int			by;
+    int32_t			xl;
+    int32_t			xh;
+    int32_t			yl;
+    int32_t			yh;
+    int32_t			bx;
+    int32_t			by;
     subsector_t*	newsubsec;
 
     tmthing = thing;
@@ -452,8 +452,8 @@ P_TryMove
 {
     fixed_t	oldx;
     fixed_t	oldy;
-    int		side;
-    int		oldside;
+    int32_t		side;
+    int32_t		oldside;
     line_t*	ld;
 
     floatok = false;
@@ -580,7 +580,7 @@ fixed_t		tmymove;
 //
 void P_HitSlideLine (line_t* ld)
 {
-    int			side;
+    int32_t			side;
 
     angle_t		lineangle;
     angle_t		moveangle;
@@ -697,7 +697,7 @@ void P_SlideMove (mobj_t* mo)
     fixed_t		traily;
     fixed_t		newx;
     fixed_t		newy;
-    int			hitcount;
+    int32_t			hitcount;
 		
     slidemo = mo;
     hitcount = 0;
@@ -795,7 +795,7 @@ mobj_t*		shootthing;
 // ???: use slope for monsters?
 fixed_t		shootz;	
 
-int		la_damage;
+int32_t		la_damage;
 fixed_t		attackrange;
 
 fixed_t		aimslope;
@@ -1062,7 +1062,7 @@ P_LineAttack
   angle_t	angle,
   fixed_t	distance,
   fixed_t	slope,
-  int		damage )
+  int32_t		damage )
 {
     fixed_t	x2;
     fixed_t	y2;
@@ -1091,7 +1091,7 @@ mobj_t*		usething;
 
 boolean	PTR_UseTraverse (intercept_t* in)
 {
-    int		side;
+    int32_t		side;
 	
     if (!in->d.line->special)
     {
@@ -1126,7 +1126,7 @@ boolean	PTR_UseTraverse (intercept_t* in)
 //
 void P_UseLines (player_t*	player) 
 {
-    int		angle;
+    int32_t		angle;
     fixed_t	x1;
     fixed_t	y1;
     fixed_t	x2;
@@ -1150,7 +1150,7 @@ void P_UseLines (player_t*	player)
 //
 mobj_t*		bombsource;
 mobj_t*		bombspot;
-int		bombdamage;
+int32_t		bombdamage;
 
 
 //
@@ -1203,15 +1203,15 @@ void
 P_RadiusAttack
 ( mobj_t*	spot,
   mobj_t*	source,
-  int		damage )
+  int32_t		damage )
 {
-    int		x;
-    int		y;
+    int32_t		x;
+    int32_t		y;
     
-    int		xl;
-    int		xh;
-    int		yl;
-    int		yh;
+    int32_t		xl;
+    int32_t		xh;
+    int32_t		yl;
+    int32_t		yh;
     
     fixed_t	dist;
 	
@@ -1319,8 +1319,8 @@ P_ChangeSector
 ( sector_t*	sector,
   boolean	crunch )
 {
-    int		x;
-    int		y;
+    int32_t		x;
+    int32_t		y;
 	
     nofit = false;
     crushchange = crunch;

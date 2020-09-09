@@ -43,7 +43,7 @@
 typedef struct
 {
     // total bytes malloced, including header
-    int		size;
+    int32_t		size;
 
     // start / end cap for linked list
     memblock_t	blocklist;
@@ -68,7 +68,7 @@ void Z_ClearZone (memzone_t* zone)
     // set the entire zone to one free block
     zone->blocklist.next =
 	zone->blocklist.prev =
-	block = (memblock_t *)( (byte *)zone + sizeof(memzone_t) );
+	block = (memblock_t *)( (uint8_t *)zone + sizeof(memzone_t) );
     
     zone->blocklist.user = (void *)zone;
     zone->blocklist.tag = PU_STATIC;
@@ -90,7 +90,7 @@ void Z_ClearZone (memzone_t* zone)
 void Z_Init (void)
 {
     memblock_t*	block;
-    int		size;
+    int32_t		size;
 
     mainzone = (memzone_t *)I_ZoneBase (&size);
     mainzone->size = size;
@@ -98,7 +98,7 @@ void Z_Init (void)
     // set the entire zone to one free block
     mainzone->blocklist.next =
 	mainzone->blocklist.prev =
-	block = (memblock_t *)( (byte *)mainzone + sizeof(memzone_t) );
+	block = (memblock_t *)( (uint8_t *)mainzone + sizeof(memzone_t) );
 
     mainzone->blocklist.user = (void *)mainzone;
     mainzone->blocklist.tag = PU_STATIC;
@@ -121,7 +121,7 @@ void Z_Free (void* ptr)
     memblock_t*		block;
     memblock_t*		other;
 	
-    block = (memblock_t *) ( (byte *)ptr - sizeof(memblock_t));
+    block = (memblock_t *) ( (uint8_t *)ptr - sizeof(memblock_t));
 
     if (block->id != ZONEID)
 	I_Error ("Z_Free: freed a pointer without ZONEID");
@@ -179,11 +179,11 @@ void Z_Free (void* ptr)
 
 void*
 Z_Malloc
-( int		size,
-  int		tag,
+( int32_t		size,
+  int32_t		tag,
   void*		user )
 {
-    int		extra;
+    int32_t		extra;
     memblock_t*	start;
     memblock_t* rover;
     memblock_t* newblock;
@@ -231,7 +231,7 @@ Z_Malloc
 
 		// the rover can be the base block
 		base = base->prev;
-		Z_Free ((byte *)rover+sizeof(memblock_t));
+		Z_Free ((uint8_t *)rover+sizeof(memblock_t));
 		base = base->next;
 		rover = base->next;
 	    }
@@ -247,7 +247,7 @@ Z_Malloc
     if (extra >  MINFRAGMENT)
     {
 	// there will be a free fragment after the allocated block
-	newblock = (memblock_t *) ((byte *)base + size );
+	newblock = (memblock_t *) ((uint8_t *)base + size );
 	newblock->size = extra;
 	
 	// NULL indicates free block.
@@ -265,7 +265,7 @@ Z_Malloc
     {
 	// mark as an in use block
 	base->user = user;			
-	*(void **)user = (void *) ((byte *)base + sizeof(memblock_t));
+	*(void **)user = (void *) ((uint8_t *)base + sizeof(memblock_t));
     }
     else
     {
@@ -282,7 +282,7 @@ Z_Malloc
 	
     base->id = ZONEID;
     
-    return (void *) ((byte *)base + sizeof(memblock_t));
+    return (void *) ((uint8_t *)base + sizeof(memblock_t));
 }
 
 
@@ -292,8 +292,8 @@ Z_Malloc
 //
 void
 Z_FreeTags
-( int		lowtag,
-  int		hightag )
+( int32_t		lowtag,
+  int32_t		hightag )
 {
     memblock_t*	block;
     memblock_t*	next;
@@ -310,7 +310,7 @@ Z_FreeTags
 	    continue;
 	
 	if (block->tag >= lowtag && block->tag <= hightag)
-	    Z_Free ( (byte *)block+sizeof(memblock_t));
+	    Z_Free ( (uint8_t *)block+sizeof(memblock_t));
     }
 }
 
@@ -322,8 +322,8 @@ Z_FreeTags
 //
 void
 Z_DumpHeap
-( int		lowtag,
-  int		hightag )
+( int32_t		lowtag,
+  int32_t		hightag )
 {
     memblock_t*	block;
 	
@@ -345,7 +345,7 @@ Z_DumpHeap
 	    break;
 	}
 	
-	if ( (byte *)block + block->size != (byte *)block->next)
+	if ( (uint8_t *)block + block->size != (uint8_t *)block->next)
 	    printf ("ERROR: block size does not touch the next block\n");
 
 	if ( block->next->prev != block)
@@ -377,7 +377,7 @@ void Z_FileDumpHeap (FILE* f)
 	    break;
 	}
 	
-	if ( (byte *)block + block->size != (byte *)block->next)
+	if ( (uint8_t *)block + block->size != (uint8_t *)block->next)
 	    fprintf (f,"ERROR: block size does not touch the next block\n");
 
 	if ( block->next->prev != block)
@@ -405,7 +405,7 @@ void Z_CheckHeap (void)
 	    break;
 	}
 	
-	if ( (byte *)block + block->size != (byte *)block->next)
+	if ( (uint8_t *)block + block->size != (uint8_t *)block->next)
 	    I_Error ("Z_CheckHeap: block size does not touch the next block\n");
 
 	if ( block->next->prev != block)
@@ -425,16 +425,16 @@ void Z_CheckHeap (void)
 void
 Z_ChangeTag2
 ( void*		ptr,
-  int		tag )
+  int32_t		tag )
 {
     memblock_t*	block;
 	
-    block = (memblock_t *) ( (byte *)ptr - sizeof(memblock_t));
+    block = (memblock_t *) ( (uint8_t *)ptr - sizeof(memblock_t));
 
     if (block->id != ZONEID)
 	I_Error ("Z_ChangeTag: freed a pointer without ZONEID");
 
-    if (tag >= PU_PURGELEVEL && (unsigned)block->user < 0x100)
+    if (tag >= PU_PURGELEVEL && (intptr_t)block->user < 0x100)
 	I_Error ("Z_ChangeTag: an owner is required for purgable blocks");
 
     block->tag = tag;
@@ -445,10 +445,10 @@ Z_ChangeTag2
 //
 // Z_FreeMemory
 //
-int Z_FreeMemory (void)
+int32_t Z_FreeMemory (void)
 {
     memblock_t*		block;
-    int			free;
+    int32_t			free;
 	
     free = 0;
     

@@ -28,7 +28,7 @@
 #include "doomstat.h"
 
 
-int	leveltime;
+int32_t	leveltime;
 
 //
 // THINKERS
@@ -126,7 +126,7 @@ void P_RunThinkers (void)
 
 void P_Ticker (void)
 {
-    int		i;
+    int32_t		i;
     
     // run the tic
     if (paused)

@@ -37,10 +37,10 @@ typedef struct
 {
     char	forwardmove;	// *2048 for move
     char	sidemove;	// *2048 for move
-    short	angleturn;	// <<16 for angle delta
-    short	consistancy;	// checks for net game
-    byte	chatchar;
-    byte	buttons;
+    int16_t	angleturn;	// <<16 for angle delta
+    int16_t	consistancy;	// checks for net game
+    uint8_t	chatchar;
+    uint8_t	buttons;
 } ticcmd_t;
 
 

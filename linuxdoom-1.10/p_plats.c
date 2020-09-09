@@ -131,15 +131,15 @@ void T_PlatRaise(plat_t* plat)
 // Do Platforms
 //  "amount" is only used for SOME platforms.
 //
-int
+int32_t
 EV_DoPlat
 ( line_t*	line,
   plattype_e	type,
-  int		amount )
+  int32_t		amount )
 {
     plat_t*	plat;
-    int		secnum;
-    int		rtn;
+    int32_t		secnum;
+    int32_t		rtn;
     sector_t*	sec;
 	
     secnum = -1;
@@ -251,9 +251,9 @@ EV_DoPlat
 
 
 
-void P_ActivateInStasis(int tag)
+void P_ActivateInStasis(int32_t tag)
 {
-    int		i;
+    int32_t		i;
 	
     for (i = 0;i < MAXPLATS;i++)
 	if (activeplats[i]
@@ -268,7 +268,7 @@ void P_ActivateInStasis(int tag)
 
 void EV_StopPlat(line_t* line)
 {
-    int		j;
+    int32_t		j;
 	
     for (j = 0;j < MAXPLATS;j++)
 	if (activeplats[j]
@@ -283,7 +283,7 @@ void EV_StopPlat(line_t* line)
 
 void P_AddActivePlat(plat_t* plat)
 {
-    int		i;
+    int32_t		i;
     
     for (i = 0;i < MAXPLATS;i++)
 	if (activeplats[i] == NULL)
@@ -296,7 +296,7 @@ void P_AddActivePlat(plat_t* plat)
 
 void P_RemoveActivePlat(plat_t* plat)
 {
-    int		i;
+    int32_t		i;
     for (i = 0;i < MAXPLATS;i++)
 	if (plat == activeplats[i])
 	{

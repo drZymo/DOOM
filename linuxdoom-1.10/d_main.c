@@ -100,15 +100,15 @@ boolean		singletics = false; // debug flag to cancel adaptiveness
 
 
 
-//extern int soundVolume;
-//extern  int	sfxVolume;
-//extern  int	musicVolume;
+//extern int32_t soundVolume;
+//extern  int32_t	sfxVolume;
+//extern  int32_t	musicVolume;
 
 extern  boolean	inhelpscreens;
 
 skill_t		startskill;
-int             startepisode;
-int		startmap;
+int32_t             startepisode;
+int32_t		startmap;
 boolean		autostart;
 
 FILE*		debugfile;
@@ -136,8 +136,8 @@ void D_DoAdvanceDemo (void);
 // Events can be discarded if no responder claims them
 //
 event_t         events[MAXEVENTS];
-int             eventhead;
-int 		eventtail;
+int32_t             eventhead;
+int32_t 		eventtail;
 
 
 //
@@ -147,7 +147,7 @@ int 		eventtail;
 void D_PostEvent (event_t* ev)
 {
     events[eventhead] = *ev;
-    eventhead = (++eventhead)&(MAXEVENTS-1);
+    eventhead = (eventhead + 1)&(MAXEVENTS-1);
 }
 
 
@@ -164,7 +164,7 @@ void D_ProcessEvents (void)
 	 && (W_CheckNumForName("map01")<0) )
       return;
 	
-    for ( ; eventtail != eventhead ; eventtail = (++eventtail)&(MAXEVENTS-1) )
+    for ( ; eventtail != eventhead ; eventtail = (eventtail + 1)&(MAXEVENTS-1) )
     {
 	ev = &events[eventtail];
 	if (M_Responder (ev))
@@ -184,7 +184,7 @@ void D_ProcessEvents (void)
 // wipegamestate can be set to -1 to force a wipe on the next draw
 gamestate_t     wipegamestate = GS_DEMOSCREEN;
 extern  boolean setsizeneeded;
-extern  int             showMessages;
+extern  int32_t             showMessages;
 void R_ExecuteSetViewSize (void);
 
 void D_Display (void)
@@ -194,11 +194,11 @@ void D_Display (void)
     static  boolean		inhelpscreensstate = false;
     static  boolean		fullscreen = false;
     static  gamestate_t		oldgamestate = -1;
-    static  int			borderdrawcount;
-    int				nowtime;
-    int				tics;
-    int				wipestart;
-    int				y;
+    static  int32_t			borderdrawcount;
+    int32_t				nowtime;
+    int32_t				tics;
+    int32_t				wipestart;
+    int32_t				y;
     boolean			done;
     boolean			wipe;
     boolean			redrawsbar;
@@ -408,8 +408,8 @@ void D_DoomLoop (void)
 //
 //  DEMO LOOP
 //
-int             demosequence;
-int             pagetic;
+int32_t             demosequence;
+int32_t             pagetic;
 char                    *pagename;
 
 
@@ -539,7 +539,7 @@ char            title[128];
 //
 void D_AddFile (char *file)
 {
-    int     numwadfiles;
+    int32_t     numwadfiles;
     char    *newfile;
 	
     for (numwadfiles = 0 ; wadfiles[numwadfiles] ; numwadfiles++)
@@ -718,17 +718,17 @@ void IdentifyVersion (void)
 //
 void FindResponseFile (void)
 {
-    int             i;
+    int32_t             i;
 #define MAXARGVS        100
 	
     for (i = 1;i < myargc;i++)
 	if (myargv[i][0] == '@')
 	{
 	    FILE *          handle;
-	    int             size;
-	    int             k;
-	    int             index;
-	    int             indexinfile;
+	    int32_t             size;
+	    int32_t             k;
+	    int32_t             index;
+	    int32_t             indexinfile;
 	    char    *infile;
 	    char    *file;
 	    char    *moreargs[20];
@@ -792,7 +792,7 @@ void FindResponseFile (void)
 //
 void D_DoomMain (void)
 {
-    int             p;
+    int32_t             p;
     char                    file[256];
 
     FindResponseFile ();
@@ -881,9 +881,9 @@ void D_DoomMain (void)
     // turbo option
     if ( (p=M_CheckParm ("-turbo")) )
     {
-	int     scale = 200;
-	extern int forwardmove[2];
-	extern int sidemove[2];
+	int32_t     scale = 200;
+	extern int32_t forwardmove[2];
+	extern int32_t sidemove[2];
 	
 	if (p<myargc-1)
 	    scale = atoi (myargv[p+1]);
@@ -979,7 +979,7 @@ void D_DoomMain (void)
     p = M_CheckParm ("-timer");
     if (p && p < myargc-1 && deathmatch)
     {
-	int     time;
+	int32_t     time;
 	time = atoi(myargv[p+1]);
 	printf("Levels will end after %d minute",time);
 	if (time>1)
@@ -1029,7 +1029,7 @@ void D_DoomMain (void)
 	    "e3m1","e3m3","e3m3","e3m4","e3m5","e3m6","e3m7","e3m8","e3m9",
 	    "dphoof","bfgga0","heada1","cybra1","spida1d1"
 	};
-	int i;
+	int32_t i;
 	
 	if ( gamemode == shareware)
 	    I_Error("\nYou cannot -file with the shareware "
@@ -1109,16 +1109,17 @@ void D_DoomMain (void)
     printf ("ST_Init: Init status bar.\n");
     ST_Init ();
 
-    // check for a driver that wants intermission stats
-    p = M_CheckParm ("-statcopy");
-    if (p && p<myargc-1)
-    {
-	// for statistics driver
-	extern  void*	statcopy;                            
+	// TODO: How could this work?
+    // // check for a driver that wants intermission stats
+    // p = M_CheckParm ("-statcopy");
+    // if (p && p<myargc-1)
+    // {
+	// // for statistics driver
+	// extern  void*	statcopy;                            
 
-	statcopy = (void*)atoi(myargv[p+1]);
-	printf ("External statistics registered.\n");
-    }
+	// statcopy = (void*)atoi(myargv[p+1]);
+	// printf ("External statistics registered.\n");
+    // }
     
     // start the apropriate game based on parms
     p = M_CheckParm ("-record");

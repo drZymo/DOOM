@@ -57,10 +57,10 @@
 typedef struct
 {
     boolean	istexture;
-    int		picnum;
-    int		basepic;
-    int		numpics;
-    int		speed;
+    int32_t		picnum;
+    int32_t		basepic;
+    int32_t		numpics;
+    int32_t		speed;
     
 } anim_t;
 
@@ -72,7 +72,7 @@ typedef struct
     boolean	istexture;	// if false, it is a flat
     char	endname[9];
     char	startname[9];
-    int		speed;
+    int32_t		speed;
 } animdef_t;
 
 
@@ -137,14 +137,14 @@ anim_t*		lastanim;
 //
 #define MAXLINEANIMS            64
 
-extern  short	numlinespecials;
+extern  int16_t	numlinespecials;
 extern  line_t*	linespeciallist[MAXLINEANIMS];
 
 
 
 void P_InitPicAnims (void)
 {
-    int		i;
+    int32_t		i;
 
     
     //	Init animation
@@ -199,9 +199,9 @@ void P_InitPicAnims (void)
 //
 side_t*
 getSide
-( int		currentSector,
-  int		line,
-  int		side )
+( int32_t		currentSector,
+  int32_t		line,
+  int32_t		side )
 {
     return &sides[ (sectors[currentSector].lines[line])->sidenum[side] ];
 }
@@ -215,9 +215,9 @@ getSide
 //
 sector_t*
 getSector
-( int		currentSector,
-  int		line,
-  int		side )
+( int32_t		currentSector,
+  int32_t		line,
+  int32_t		side )
 {
     return sides[ (sectors[currentSector].lines[line])->sidenum[side] ].sector;
 }
@@ -228,10 +228,10 @@ getSector
 // Given the sector number and the line number,
 //  it will tell you whether the line is two-sided or not.
 //
-int
+int32_t
 twoSided
-( int	sector,
-  int	line )
+( int32_t	sector,
+  int32_t	line )
 {
     return (sectors[sector].lines[line])->flags & ML_TWOSIDED;
 }
@@ -266,7 +266,7 @@ getNextSector
 //
 fixed_t	P_FindLowestFloorSurrounding(sector_t* sec)
 {
-    int			i;
+    int32_t			i;
     line_t*		check;
     sector_t*		other;
     fixed_t		floor = sec->floorheight;
@@ -293,7 +293,7 @@ fixed_t	P_FindLowestFloorSurrounding(sector_t* sec)
 //
 fixed_t	P_FindHighestFloorSurrounding(sector_t *sec)
 {
-    int			i;
+    int32_t			i;
     line_t*		check;
     sector_t*		other;
     fixed_t		floor = -500*FRACUNIT;
@@ -325,11 +325,11 @@ fixed_t	P_FindHighestFloorSurrounding(sector_t *sec)
 fixed_t
 P_FindNextHighestFloor
 ( sector_t*	sec,
-  int		currentheight )
+  int32_t		currentheight )
 {
-    int			i;
-    int			h;
-    int			min;
+    int32_t			i;
+    int32_t			h;
+    int32_t			min;
     line_t*		check;
     sector_t*		other;
     fixed_t		height = currentheight;
@@ -378,7 +378,7 @@ P_FindNextHighestFloor
 fixed_t
 P_FindLowestCeilingSurrounding(sector_t* sec)
 {
-    int			i;
+    int32_t			i;
     line_t*		check;
     sector_t*		other;
     fixed_t		height = MAXINT;
@@ -403,7 +403,7 @@ P_FindLowestCeilingSurrounding(sector_t* sec)
 //
 fixed_t	P_FindHighestCeilingSurrounding(sector_t* sec)
 {
-    int		i;
+    int32_t		i;
     line_t*	check;
     sector_t*	other;
     fixed_t	height = 0;
@@ -427,12 +427,12 @@ fixed_t	P_FindHighestCeilingSurrounding(sector_t* sec)
 //
 // RETURN NEXT SECTOR # THAT LINE TAG REFERS TO
 //
-int
+int32_t
 P_FindSectorFromLineTag
 ( line_t*	line,
-  int		start )
+  int32_t		start )
 {
-    int	i;
+    int32_t	i;
 	
     for (i=start+1;i<numsectors;i++)
 	if (sectors[i].tag == line->tag)
@@ -447,13 +447,13 @@ P_FindSectorFromLineTag
 //
 // Find minimum light from an adjacent sector
 //
-int
+int32_t
 P_FindMinSurroundingLight
 ( sector_t*	sector,
-  int		max )
+  int32_t		max )
 {
-    int		i;
-    int		min;
+    int32_t		i;
+    int32_t		min;
     line_t*	line;
     sector_t*	check;
 	
@@ -487,12 +487,12 @@ P_FindMinSurroundingLight
 //
 void
 P_CrossSpecialLine
-( int		linenum,
-  int		side,
+( int32_t		linenum,
+  int32_t		side,
   mobj_t*	thing )
 {
     line_t*	line;
-    int		ok;
+    int32_t		ok;
 
     line = &lines[linenum];
     
@@ -957,7 +957,7 @@ P_ShootSpecialLine
 ( mobj_t*	thing,
   line_t*	line )
 {
-    int		ok;
+    int32_t		ok;
     
     //	Impacts that other things can activate.
     if (!thing->player)
@@ -1075,13 +1075,13 @@ void P_PlayerInSpecialSector (player_t* player)
 // Animate planes, scroll walls, etc.
 //
 boolean		levelTimer;
-int		levelTimeCount;
+int32_t		levelTimeCount;
 
 void P_UpdateSpecials (void)
 {
     anim_t*	anim;
-    int		pic;
-    int		i;
+    int32_t		pic;
+    int32_t		i;
     line_t*	line;
 
     
@@ -1157,14 +1157,14 @@ void P_UpdateSpecials (void)
 //
 // Special Stuff that can not be categorized
 //
-int EV_DoDonut(line_t*	line)
+int32_t EV_DoDonut(line_t*	line)
 {
     sector_t*		s1;
     sector_t*		s2;
     sector_t*		s3;
-    int			secnum;
-    int			rtn;
-    int			i;
+    int32_t			secnum;
+    int32_t			rtn;
+    int32_t			i;
     floormove_t*	floor;
 	
     secnum = -1;
@@ -1181,7 +1181,7 @@ int EV_DoDonut(line_t*	line)
 	s2 = getNextSector(s1->lines[0],s1);
 	for (i = 0;i < s2->linecount;i++)
 	{
-	    if ((!s2->lines[i]->flags & ML_TWOSIDED) ||
+	    if ((!(s2->lines[i]->flags & ML_TWOSIDED)) ||
 		(s2->lines[i]->backsector == s1))
 		continue;
 	    s3 = s2->lines[i]->backsector;
@@ -1228,7 +1228,7 @@ int EV_DoDonut(line_t*	line)
 // After the map has been loaded, scan for specials
 //  that spawn thinkers
 //
-short		numlinespecials;
+int16_t		numlinespecials;
 line_t*		linespeciallist[MAXLINEANIMS];
 
 
@@ -1236,13 +1236,9 @@ line_t*		linespeciallist[MAXLINEANIMS];
 void P_SpawnSpecials (void)
 {
     sector_t*	sector;
-    int		i;
-    int		episode;
+    int32_t		i;
 
-    episode = 1;
     if (W_CheckNumForName("texture2") >= 0)
-	episode = 2;
-
     
     // See if -TIMER needs to be used.
     levelTimer = false;
@@ -1257,7 +1253,7 @@ void P_SpawnSpecials (void)
     i = M_CheckParm("-timer");
     if (i && deathmatch)
     {
-	int	time;
+	int32_t	time;
 	time = atoi(myargv[i+1]) * 60 * 35;
 	levelTimer = true;
 	levelTimeCount = time;

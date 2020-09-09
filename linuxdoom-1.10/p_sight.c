@@ -40,14 +40,14 @@ divline_t	strace;			// from t1 to t2
 fixed_t		t2x;
 fixed_t		t2y;
 
-int		sightcounts[2];
+int32_t		sightcounts[2];
 
 
 //
 // P_DivlineSide
 // Returns side 0 (front), 1 (back), or 2 (on).
 //
-int
+int32_t
 P_DivlineSide
 ( fixed_t	x,
   fixed_t	y,
@@ -128,13 +128,13 @@ P_InterceptVector2
 // Returns true
 //  if strace crosses the given subsector successfully.
 //
-boolean P_CrossSubsector (int num)
+boolean P_CrossSubsector (int32_t num)
 {
     seg_t*		seg;
     line_t*		line;
-    int			s1;
-    int			s2;
-    int			count;
+    int32_t			s1;
+    int32_t			s2;
+    int32_t			count;
     subsector_t*	sub;
     sector_t*		front;
     sector_t*		back;
@@ -250,10 +250,10 @@ boolean P_CrossSubsector (int num)
 // Returns true
 //  if strace crosses the given node successfully.
 //
-boolean P_CrossBSPNode (int bspnum)
+boolean P_CrossBSPNode (int32_t bspnum)
 {
     node_t*	bsp;
-    int		side;
+    int32_t		side;
 
     if (bspnum & NF_SUBSECTOR)
     {
@@ -297,11 +297,11 @@ P_CheckSight
 ( mobj_t*	t1,
   mobj_t*	t2 )
 {
-    int		s1;
-    int		s2;
-    int		pnum;
-    int		bytenum;
-    int		bitnum;
+    int32_t		s1;
+    int32_t		s2;
+    int32_t		pnum;
+    int32_t		bytenum;
+    int32_t		bitnum;
     
     // First check for trivial rejection.
 

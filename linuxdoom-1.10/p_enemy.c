@@ -102,9 +102,9 @@ mobj_t*		soundtarget;
 void
 P_RecursiveSound
 ( sector_t*	sec,
-  int		soundblocks )
+  int32_t		soundblocks )
 {
-    int		i;
+    int32_t		i;
     line_t*	check;
     sector_t*	other;
 	
@@ -264,7 +264,7 @@ fixed_t yspeed[8] = {0,47000,FRACUNIT,47000,0,-47000,-FRACUNIT,-47000};
 #define MAXSPECIALCROSS	8
 
 extern	line_t*	spechit[MAXSPECIALCROSS];
-extern	int	numspechit;
+extern	int32_t	numspechit;
 
 boolean P_Move (mobj_t*	actor)
 {
@@ -281,7 +281,7 @@ boolean P_Move (mobj_t*	actor)
     if (actor->movedir == DI_NODIR)
 	return false;
 		
-    if ((unsigned)actor->movedir >= 8)
+    if ((uint32_t)actor->movedir >= 8)
 	I_Error ("Weird actor->movedir!");
 		
     tryx = actor->x + actor->info->speed*xspeed[actor->movedir];
@@ -364,7 +364,7 @@ void P_NewChaseDir (mobj_t*	actor)
     
     dirtype_t	d[3];
     
-    int		tdir;
+    int32_t		tdir;
     dirtype_t	olddir;
     
     dirtype_t	turnaround;
@@ -497,15 +497,12 @@ P_LookForPlayers
 ( mobj_t*	actor,
   boolean	allaround )
 {
-    int		c;
-    int		stop;
+    int32_t		c;
+    int32_t		stop;
     player_t*	player;
-    sector_t*	sector;
     angle_t	an;
     fixed_t	dist;
 		
-    sector = actor->subsector->sector;
-	
     c = 0;
     stop = (actor->lastlook-1)&3;
 	
@@ -627,7 +624,7 @@ void A_Look (mobj_t* actor)
   seeyou:
     if (actor->info->seesound)
     {
-	int		sound;
+	int32_t		sound;
 		
 	switch (actor->info->seesound)
 	{
@@ -668,7 +665,7 @@ void A_Look (mobj_t* actor)
 //
 void A_Chase (mobj_t*	actor)
 {
-    int		delta;
+    int32_t		delta;
 
     if (actor->reactiontime)
 	actor->reactiontime--;
@@ -798,9 +795,9 @@ void A_FaceTarget (mobj_t* actor)
 //
 void A_PosAttack (mobj_t* actor)
 {
-    int		angle;
-    int		damage;
-    int		slope;
+    int32_t		angle;
+    int32_t		damage;
+    int32_t		slope;
 	
     if (!actor->target)
 	return;
@@ -817,11 +814,11 @@ void A_PosAttack (mobj_t* actor)
 
 void A_SPosAttack (mobj_t* actor)
 {
-    int		i;
-    int		angle;
-    int		bangle;
-    int		damage;
-    int		slope;
+    int32_t		i;
+    int32_t		angle;
+    int32_t		bangle;
+    int32_t		damage;
+    int32_t		slope;
 	
     if (!actor->target)
 	return;
@@ -841,10 +838,10 @@ void A_SPosAttack (mobj_t* actor)
 
 void A_CPosAttack (mobj_t* actor)
 {
-    int		angle;
-    int		bangle;
-    int		damage;
-    int		slope;
+    int32_t		angle;
+    int32_t		bangle;
+    int32_t		damage;
+    int32_t		slope;
 	
     if (!actor->target)
 	return;
@@ -909,7 +906,7 @@ void A_BspiAttack (mobj_t *actor)
 //
 void A_TroopAttack (mobj_t* actor)
 {
-    int		damage;
+    int32_t		damage;
 	
     if (!actor->target)
 	return;
@@ -931,7 +928,7 @@ void A_TroopAttack (mobj_t* actor)
 
 void A_SargAttack (mobj_t* actor)
 {
-    int		damage;
+    int32_t		damage;
 
     if (!actor->target)
 	return;
@@ -946,7 +943,7 @@ void A_SargAttack (mobj_t* actor)
 
 void A_HeadAttack (mobj_t* actor)
 {
-    int		damage;
+    int32_t		damage;
 	
     if (!actor->target)
 	return;
@@ -975,7 +972,7 @@ void A_CyberAttack (mobj_t* actor)
 
 void A_BruisAttack (mobj_t* actor)
 {
-    int		damage;
+    int32_t		damage;
 	
     if (!actor->target)
 	return;
@@ -1013,7 +1010,7 @@ void A_SkelMissile (mobj_t* actor)
     mo->tracer = actor->target;
 }
 
-int	TRACEANGLE = 0xc000000;
+int32_t	TRACEANGLE = 0xc000000;
 
 void A_Tracer (mobj_t* actor)
 {
@@ -1097,7 +1094,7 @@ void A_SkelWhoosh (mobj_t*	actor)
 
 void A_SkelFist (mobj_t*	actor)
 {
-    int		damage;
+    int32_t		damage;
 
     if (!actor->target)
 	return;
@@ -1125,7 +1122,7 @@ fixed_t		viletryy;
 
 boolean PIT_VileCheck (mobj_t*	thing)
 {
-    int		maxdist;
+    int32_t		maxdist;
     boolean	check;
 	
     if (!(thing->flags & MF_CORPSE) )
@@ -1163,13 +1160,13 @@ boolean PIT_VileCheck (mobj_t*	thing)
 //
 void A_VileChase (mobj_t* actor)
 {
-    int			xl;
-    int			xh;
-    int			yl;
-    int			yh;
+    int32_t			xl;
+    int32_t			xh;
+    int32_t			yl;
+    int32_t			yh;
     
-    int			bx;
-    int			by;
+    int32_t			bx;
+    int32_t			by;
 
     mobjinfo_t*		info;
     mobj_t*		temp;
@@ -1254,7 +1251,7 @@ void A_FireCrackle (mobj_t* actor)
 void A_Fire (mobj_t* actor)
 {
     mobj_t*	dest;
-    unsigned	an;
+    uint32_t	an;
 		
     dest = actor->tracer;
     if (!dest)
@@ -1307,7 +1304,7 @@ void A_VileTarget (mobj_t*	actor)
 void A_VileAttack (mobj_t* actor)
 {	
     mobj_t*	fire;
-    int		an;
+    int32_t		an;
 	
     if (!actor->target)
 	return;
@@ -1355,7 +1352,7 @@ void A_FatRaise (mobj_t *actor)
 void A_FatAttack1 (mobj_t* actor)
 {
     mobj_t*	mo;
-    int		an;
+    int32_t		an;
 	
     A_FaceTarget (actor);
     // Change direction  to ...
@@ -1372,7 +1369,7 @@ void A_FatAttack1 (mobj_t* actor)
 void A_FatAttack2 (mobj_t* actor)
 {
     mobj_t*	mo;
-    int		an;
+    int32_t		an;
 
     A_FaceTarget (actor);
     // Now here choose opposite deviation.
@@ -1389,7 +1386,7 @@ void A_FatAttack2 (mobj_t* actor)
 void A_FatAttack3 (mobj_t*	actor)
 {
     mobj_t*	mo;
-    int		an;
+    int32_t		an;
 
     A_FaceTarget (actor);
     
@@ -1417,7 +1414,7 @@ void A_SkullAttack (mobj_t* actor)
 {
     mobj_t*		dest;
     angle_t		an;
-    int			dist;
+    int32_t			dist;
 
     if (!actor->target)
 	return;
@@ -1454,8 +1451,8 @@ A_PainShootSkull
     
     mobj_t*	newmobj;
     angle_t	an;
-    int		prestep;
-    int		count;
+    int32_t		prestep;
+    int32_t		count;
     thinker_t*	currentthinker;
 
     // count total number of skull currently on the level
@@ -1531,7 +1528,7 @@ void A_PainDie (mobj_t* actor)
 
 void A_Scream (mobj_t* actor)
 {
-    int		sound;
+    int32_t		sound;
 	
     switch (actor->info->deathsound)
     {
@@ -1608,7 +1605,7 @@ void A_BossDeath (mobj_t* mo)
     thinker_t*	th;
     mobj_t*	mo2;
     line_t	junk;
-    int		i;
+    int32_t		i;
 		
     if ( gamemode == commercial)
     {
@@ -1804,8 +1801,8 @@ A_CloseShotgun2
 
 
 mobj_t*		braintargets[32];
-int		numbraintargets;
-int		braintargeton;
+int32_t		numbraintargets;
+int32_t		braintargeton;
 
 void A_BrainAwake (mobj_t* mo)
 {
@@ -1845,9 +1842,9 @@ void A_BrainPain (mobj_t*	mo)
 
 void A_BrainScream (mobj_t*	mo)
 {
-    int		x;
-    int		y;
-    int		z;
+    int32_t		x;
+    int32_t		y;
+    int32_t		z;
     mobj_t*	th;
 	
     for (x=mo->x - 196*FRACUNIT ; x< mo->x + 320*FRACUNIT ; x+= FRACUNIT*8)
@@ -1871,9 +1868,9 @@ void A_BrainScream (mobj_t*	mo)
 
 void A_BrainExplode (mobj_t* mo)
 {
-    int		x;
-    int		y;
-    int		z;
+    int32_t		x;
+    int32_t		y;
+    int32_t		z;
     mobj_t*	th;
 	
     x = mo->x + (P_Random () - P_Random ())*2048;
@@ -1900,7 +1897,7 @@ void A_BrainSpit (mobj_t*	mo)
     mobj_t*	targ;
     mobj_t*	newmobj;
     
-    static int	easy = 0;
+    static int32_t	easy = 0;
 	
     easy ^= 1;
     if (gameskill <= sk_easy && (!easy))
@@ -1935,7 +1932,7 @@ void A_SpawnFly (mobj_t* mo)
     mobj_t*	newmobj;
     mobj_t*	fog;
     mobj_t*	targ;
-    int		r;
+    int32_t		r;
     mobjtype_t	type;
 	
     if (--mo->reactiontime)
@@ -1991,7 +1988,7 @@ void A_SpawnFly (mobj_t* mo)
 void A_PlayerScream (mobj_t* mo)
 {
     // Default death sound.
-    int		sound = sfx_pldeth;
+    int32_t		sound = sfx_pldeth;
 	
     if ( (gamemode == commercial)
 	&& 	(mo->health < -50))

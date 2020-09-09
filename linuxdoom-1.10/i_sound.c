@@ -55,6 +55,8 @@
 
 #include "doomdef.h"
 
+#include <errno.h>
+
 // UNIX hack, to be removed.
 #ifdef SNDSERV
 // Separate sound server process.
@@ -68,7 +70,7 @@ char*	sndserver_filename = "./sndserver ";
 #define SOUND_INTERVAL     500
 
 // Get the interrupt. Set duration in millisecs.
-int I_SoundSetTimer( int duration_of_tick );
+int32_t I_SoundSetTimer( int32_t duration_of_tick );
 void I_SoundDelTimer( void );
 #else
 // None?
@@ -78,7 +80,7 @@ void I_SoundDelTimer( void );
 // A quick hack to establish a protocol between
 // synchronous mix buffer updates and asynchronous
 // audio writes. Probably redundant with gametic.
-static int flag = 0;
+static int32_t flag = 0;
 
 // The number of internal mixing channels,
 //  the samples calculated for each mixing step,
@@ -97,27 +99,27 @@ static int flag = 0;
 #define SAMPLESIZE		2   	// 16bit
 
 // The actual lengths of all sound effects.
-int 		lengths[NUMSFX];
+int32_t 		lengths[NUMSFX];
 
 // The actual output device.
-int	audio_fd;
+int32_t	audio_fd;
 
 // The global mixing buffer.
 // Basically, samples from all active internal channels
 //  are modifed and added, and stored in the buffer
 //  that is submitted to the audio device.
-signed short	mixbuffer[MIXBUFFERSIZE];
+int16_t	mixbuffer[MIXBUFFERSIZE];
 
 
 // The channel step amount...
-unsigned int	channelstep[NUM_CHANNELS];
+uint32_t	channelstep[NUM_CHANNELS];
 // ... and a 0.16 bit remainder of last step.
-unsigned int	channelstepremainder[NUM_CHANNELS];
+uint32_t	channelstepremainder[NUM_CHANNELS];
 
 
 // The channel data pointers, start and end.
-unsigned char*	channels[NUM_CHANNELS];
-unsigned char*	channelsend[NUM_CHANNELS];
+uint8_t*	channels[NUM_CHANNELS];
+uint8_t*	channelsend[NUM_CHANNELS];
 
 
 // Time/gametic that the channel started playing,
@@ -125,27 +127,27 @@ unsigned char*	channelsend[NUM_CHANNELS];
 //  has lowest priority.
 // In case number of active sounds exceeds
 //  available channels.
-int		channelstart[NUM_CHANNELS];
+int32_t		channelstart[NUM_CHANNELS];
 
 // The sound in channel handles,
 //  determined on registration,
 //  might be used to unregister/stop/modify,
 //  currently unused.
-int 		channelhandles[NUM_CHANNELS];
+int32_t 		channelhandles[NUM_CHANNELS];
 
 // SFX id of the playing sound effect.
 // Used to catch duplicates (like chainsaw).
-int		channelids[NUM_CHANNELS];			
+int32_t		channelids[NUM_CHANNELS];			
 
 // Pitch to stepping lookup, unused.
-int		steptable[256];
+int32_t		steptable[256];
 
 // Volume lookups.
-int		vol_lookup[128*256];
+int32_t		vol_lookup[128*256];
 
 // Hardware left and right channel volume lookup.
-int*		channelleftvol_lookup[NUM_CHANNELS];
-int*		channelrightvol_lookup[NUM_CHANNELS];
+int32_t*		channelleftvol_lookup[NUM_CHANNELS];
+int32_t*		channelrightvol_lookup[NUM_CHANNELS];
 
 
 
@@ -155,12 +157,11 @@ int*		channelrightvol_lookup[NUM_CHANNELS];
 //
 void
 myioctl
-( int	fd,
-  int	command,
-  int*	arg )
+( int32_t	fd,
+  int32_t	command,
+  int32_t*	arg )
 {   
-    int		rc;
-    extern int	errno;
+    int32_t		rc;
     
     rc = ioctl(fd, command, arg);  
     if (rc < 0)
@@ -182,15 +183,15 @@ myioctl
 void*
 getsfx
 ( char*         sfxname,
-  int*          len )
+  int32_t*          len )
 {
-    unsigned char*      sfx;
-    unsigned char*      paddedsfx;
-    int                 i;
-    int                 size;
-    int                 paddedsize;
+    uint8_t*      sfx;
+    uint8_t*      paddedsfx;
+    int32_t                 i;
+    int32_t                 size;
+    int32_t                 paddedsize;
     char                name[20];
-    int                 sfxlump;
+    int32_t                 sfxlump;
 
     
     // Get the sound data from the WAD, allocate lump
@@ -220,15 +221,15 @@ getsfx
     //	     sfxname, sfxlump, size );
     //fflush( stderr );
     
-    sfx = (unsigned char*)W_CacheLumpNum( sfxlump, PU_STATIC );
+    sfx = (uint8_t*)W_CacheLumpNum( sfxlump, PU_STATIC );
 
     // Pads the sound effect out to the mixing buffer size.
     // The original realloc would interfere with zone memory.
     paddedsize = ((size-8 + (SAMPLECOUNT-1)) / SAMPLECOUNT) * SAMPLECOUNT;
 
     // Allocate from zone memory.
-    paddedsfx = (unsigned char*)Z_Malloc( paddedsize+8, PU_STATIC, 0 );
-    // ddt: (unsigned char *) realloc(sfx, paddedsize+8);
+    paddedsfx = (uint8_t*)Z_Malloc( paddedsize+8, PU_STATIC, 0 );
+    // ddt: (uint8_t *) realloc(sfx, paddedsize+8);
     // This should interfere with zone memory handling,
     //  which does not kick in in the soundserver.
 
@@ -258,24 +259,24 @@ getsfx
 //  (eight, usually) of internal channels.
 // Returns a handle.
 //
-int
+int32_t
 addsfx
-( int		sfxid,
-  int		volume,
-  int		step,
-  int		seperation )
+( int32_t		sfxid,
+  int32_t		volume,
+  int32_t		step,
+  int32_t		seperation )
 {
-    static unsigned short	handlenums = 0;
+    static uint16_t	handlenums = 0;
  
-    int		i;
-    int		rc = -1;
+    int32_t		i;
+    int32_t		rc = -1;
     
-    int		oldest = gametic;
-    int		oldestnum = 0;
-    int		slot;
+    int32_t		oldest = gametic;
+    int32_t		oldestnum = 0;
+    int32_t		slot;
 
-    int		rightvol;
-    int		leftvol;
+    int32_t		rightvol;
+    int32_t		leftvol;
 
     // Chainsaw troubles.
     // Play these sound effects only one at a time.
@@ -324,7 +325,7 @@ addsfx
     // Okay, in the less recent channel,
     //  we will handle the new SFX.
     // Set pointer to raw data.
-    channels[slot] = (unsigned char *) S_sfx[sfxid].data;
+    channels[slot] = (uint8_t *) S_sfx[sfxid].data;
     // Set pointer to end of raw data.
     channelsend[slot] = channels[slot] + lengths[sfxid];
 
@@ -395,10 +396,10 @@ void I_SetChannels()
   // Init internal lookups (raw data, mixing buffer, channels).
   // This function sets up internal lookups used during
   //  the mixing process. 
-  int		i;
-  int		j;
+  int32_t		i;
+  int32_t		j;
     
-  int*	steptablemid = steptable + 128;
+  int32_t*	steptablemid = steptable + 128;
   
   // Okay, reset internal mixing channels to zero.
   /*for (i=0; i<NUM_CHANNELS; i++)
@@ -409,11 +410,11 @@ void I_SetChannels()
   // This table provides step widths for pitch parameters.
   // I fail to see that this is currently used.
   for (i=-128 ; i<128 ; i++)
-    steptablemid[i] = (int)(pow(2.0, (i/64.0))*65536.0);
+    steptablemid[i] = (int32_t)(pow(2.0, (i/64.0))*65536.0);
   
   
   // Generates volume lookup tables
-  //  which also turn the unsigned samples
+  //  which also turn the uint32_t samples
   //  into signed samples.
   for (i=0 ; i<128 ; i++)
     for (j=0 ; j<256 ; j++)
@@ -421,7 +422,7 @@ void I_SetChannels()
 }	
 
  
-void I_SetSfxVolume(int volume)
+void I_SetSfxVolume(int32_t volume)
 {
   // Identical to DOS.
   // Basically, this should propagate
@@ -432,7 +433,7 @@ void I_SetSfxVolume(int volume)
 }
 
 // MUSIC API - dummy. Some code from DOS version.
-void I_SetMusicVolume(int volume)
+void I_SetMusicVolume(int32_t volume)
 {
   // Internal state variable.
   snd_MusicVolume = volume;
@@ -445,7 +446,7 @@ void I_SetMusicVolume(int volume)
 // Retrieve the raw data lump index
 //  for a given SFX name.
 //
-int I_GetSfxLumpNum(sfxinfo_t* sfx)
+int32_t I_GetSfxLumpNum(sfxinfo_t* sfx)
 {
     char namebuf[9];
     sprintf(namebuf, "ds%s", sfx->name);
@@ -464,13 +465,13 @@ int I_GetSfxLumpNum(sfxinfo_t* sfx)
 // Pitching (that is, increased speed of playback)
 //  is set, but currently not used by mixing.
 //
-int
+int32_t
 I_StartSound
-( int		id,
-  int		vol,
-  int		sep,
-  int		pitch,
-  int		priority )
+( int32_t		id,
+  int32_t		vol,
+  int32_t		sep,
+  int32_t		pitch,
+  int32_t		priority )
 {
 
   // UNUSED
@@ -499,7 +500,7 @@ I_StartSound
 
 
 
-void I_StopSound (int handle)
+void I_StopSound (int32_t handle)
 {
   // You need the handle returned by StartSound.
   // Would be looping all channels,
@@ -511,7 +512,7 @@ void I_StopSound (int handle)
 }
 
 
-int I_SoundIsPlaying(int handle)
+int32_t I_SoundIsPlaying(int32_t handle)
 {
     // Ouch.
     return gametic < handle;
@@ -537,25 +538,25 @@ void I_UpdateSound( void )
 {
 #ifdef SNDINTR
   // Debug. Count buffer misses with interrupt.
-  static int misses = 0;
+  static int32_t misses = 0;
 #endif
 
   
   // Mix current sound data.
   // Data, from raw sound, for right and left.
-  register unsigned int	sample;
-  register int		dl;
-  register int		dr;
+  register uint32_t	sample;
+  register int32_t		dl;
+  register int32_t		dr;
   
   // Pointers in global mixbuffer, left, right, end.
-  signed short*		leftout;
-  signed short*		rightout;
-  signed short*		leftend;
+  int16_t*		leftout;
+  int16_t*		rightout;
+  int16_t*		leftend;
   // Step in mixbuffer, left and right, thus two.
-  int				step;
+  int32_t				step;
 
   // Mixing channel index.
-  int				chan;
+  int32_t				chan;
     
     // Left and right channel
     //  are in global mixbuffer, alternating.
@@ -606,7 +607,7 @@ void I_UpdateSound( void )
 	}
 	
 	// Clamp to range. Left hardware channel.
-	// Has been char instead of short.
+	// Has been char instead of int16_t.
 	// if (dl > 127) *leftout = 127;
 	// else if (dl < -128) *leftout = -128;
 	// else *leftout = dl;
@@ -670,10 +671,10 @@ I_SubmitSound(void)
 
 void
 I_UpdateSoundParams
-( int	handle,
-  int	vol,
-  int	sep,
-  int	pitch)
+( int32_t	handle,
+  int32_t	vol,
+  int32_t	sep,
+  int32_t	pitch)
 {
   // I fail too see that this is used.
   // Would be using the handle to identify
@@ -698,8 +699,8 @@ void I_ShutdownSound(void)
   }
 #else
   // Wait till all pending sounds are finished.
-  int done = 0;
-  int i;
+  int32_t done = 0;
+  int32_t i;
   
 
   // FIXME (below).
@@ -754,7 +755,7 @@ I_InitSound()
     fprintf(stderr, "Could not start sound server [%s]\n", buffer);
 #else
     
-  int i;
+  int32_t i;
   
 #ifdef SNDINTR
   fprintf( stderr, "I_SoundSetTimer: %d microsecs\n", SOUND_INTERVAL );
@@ -832,29 +833,29 @@ I_InitSound()
 void I_InitMusic(void)		{ }
 void I_ShutdownMusic(void)	{ }
 
-static int	looping=0;
-static int	musicdies=-1;
+static int32_t	looping=0;
+static int32_t	musicdies=-1;
 
-void I_PlaySong(int handle, int looping)
+void I_PlaySong(int32_t handle, int32_t looping)
 {
   // UNUSED.
   handle = looping = 0;
   musicdies = gametic + TICRATE*30;
 }
 
-void I_PauseSong (int handle)
+void I_PauseSong (int32_t handle)
 {
   // UNUSED.
   handle = 0;
 }
 
-void I_ResumeSong (int handle)
+void I_ResumeSong (int32_t handle)
 {
   // UNUSED.
   handle = 0;
 }
 
-void I_StopSong(int handle)
+void I_StopSong(int32_t handle)
 {
   // UNUSED.
   handle = 0;
@@ -863,13 +864,13 @@ void I_StopSong(int handle)
   musicdies = 0;
 }
 
-void I_UnRegisterSong(int handle)
+void I_UnRegisterSong(int32_t handle)
 {
   // UNUSED.
   handle = 0;
 }
 
-int I_RegisterSong(void* data)
+int32_t I_RegisterSong(void* data)
 {
   // UNUSED.
   data = NULL;
@@ -878,7 +879,7 @@ int I_RegisterSong(void* data)
 }
 
 // Is the song playing?
-int I_QrySongPlaying(int handle)
+int32_t I_QrySongPlaying(int32_t handle)
 {
   // UNUSED.
   handle = 0;
@@ -898,7 +899,7 @@ int I_QrySongPlaying(int handle)
 #ifdef sun
     typedef     sigset_t        tSigSet;
 #else    
-    typedef     int             tSigSet;
+    typedef     int32_t             tSigSet;
 #endif
 
 
@@ -906,12 +907,12 @@ int I_QrySongPlaying(int handle)
 //  time independend timer happens to get lost due to heavy load.
 // SIGALRM and ITIMER_REAL doesn't really work well.
 // There are issues with profiling as well.
-static int /*__itimer_which*/  itimer = ITIMER_REAL;
+static int32_t /*__itimer_which*/  itimer = ITIMER_REAL;
 
-static int sig = SIGALRM;
+static int32_t sig = SIGALRM;
 
 // Interrupt handler.
-void I_HandleSoundTimer( int ignore )
+void I_HandleSoundTimer( int32_t ignore )
 {
   // Debug.
   //fprintf( stderr, "%c", '+' ); fflush( stderr );
@@ -935,7 +936,7 @@ void I_HandleSoundTimer( int ignore )
 }
 
 // Get the interrupt. Set duration in millisecs.
-int I_SoundSetTimer( int duration_of_tick )
+int32_t I_SoundSetTimer( int32_t duration_of_tick )
 {
   // Needed for gametick clockwork.
   struct itimerval    value;
@@ -943,7 +944,7 @@ int I_SoundSetTimer( int duration_of_tick )
   struct sigaction    act;
   struct sigaction    oact;
 
-  int res;
+  int32_t res;
   
   // This sets to SA_ONESHOT and SA_NOMASK, thus we can not use it.
   //     signal( _sig, handle_SIG_TICK );

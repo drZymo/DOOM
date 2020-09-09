@@ -37,7 +37,7 @@
 #include "doomstat.h"
 
 
-void G_PlayerReborn (int player);
+void G_PlayerReborn (int32_t player);
 void P_SpawnMapThing (mapthing_t*	mthing);
 
 
@@ -45,7 +45,7 @@ void P_SpawnMapThing (mapthing_t*	mthing);
 // P_SetMobjState
 // Returns true if the mobj is still present.
 //
-int test;
+int32_t test;
 
 boolean
 P_SetMobjState
@@ -224,7 +224,7 @@ void P_XYMovement (mobj_t* mo)
 		&& player->cmd.sidemove == 0 ) ) )
     {
 	// if in a walking frame, stop moving
-	if ( player&&(unsigned)((player->mo->state - states)- S_PLAY_RUN1) < 4)
+	if ( player&&(uint32_t)((player->mo->state - states)- S_PLAY_RUN1) < 4)
 	    P_SetMobjState (player->mo, S_PLAY);
 	
 	mo->momx = 0;
@@ -535,9 +535,9 @@ P_SpawnMobj
 // P_RemoveMobj
 //
 mapthing_t	itemrespawnque[ITEMQUESIZE];
-int		itemrespawntime[ITEMQUESIZE];
-int		iquehead;
-int		iquetail;
+int32_t		itemrespawntime[ITEMQUESIZE];
+int32_t		iquehead;
+int32_t		iquetail;
 
 
 void P_RemoveMobj (mobj_t* mobj)
@@ -582,7 +582,7 @@ void P_RespawnSpecials (void)
     mobj_t*		mo;
     mapthing_t*		mthing;
     
-    int			i;
+    int32_t			i;
 
     // only respawn items in deathmatch
     if (deathmatch != 2)
@@ -645,7 +645,7 @@ void P_SpawnPlayer (mapthing_t* mthing)
 
     mobj_t*		mobj;
 
-    int			i;
+    int32_t			i;
 
     // not playing?
     if (!playeringame[mthing->type-1])
@@ -700,12 +700,12 @@ void P_SpawnPlayer (mapthing_t* mthing)
 //
 // P_SpawnMapThing
 // The fields of the mapthing should
-// already be in host byte order.
+// already be in host uint8_t order.
 //
 void P_SpawnMapThing (mapthing_t* mthing)
 {
-    int			i;
-    int			bit;
+    int32_t			i;
+    int32_t			bit;
     mobj_t*		mobj;
     fixed_t		x;
     fixed_t		y;
@@ -837,7 +837,7 @@ P_SpawnBlood
 ( fixed_t	x,
   fixed_t	y,
   fixed_t	z,
-  int		damage )
+  int32_t		damage )
 {
     mobj_t*	th;
 	
@@ -890,7 +890,7 @@ P_SpawnMissile
 {
     mobj_t*	th;
     angle_t	an;
-    int		dist;
+    int32_t		dist;
 
     th = P_SpawnMobj (source->x,
 		      source->y,

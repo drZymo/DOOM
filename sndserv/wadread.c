@@ -47,29 +47,29 @@
 #include "wadread.h"
 
 
-int*		sfxlengths;
+int32_t*		sfxlengths;
 
 typedef struct wadinfo_struct
 {
     char	identification[4];		                 
-    int		numlumps;
-    int		infotableofs;
+    int32_t		numlumps;
+    int32_t		infotableofs;
 
 } wadinfo_t;
 
 typedef struct filelump_struct
 {
-    int		filepos;
-    int		size;
+    int32_t		filepos;
+    int32_t		size;
     char	name[8];
 
 } filelump_t;
 
 typedef struct lumpinfo_struct
 {
-    int		handle;
-    int		filepos;
-    int		size;
+    int32_t		handle;
+    int32_t		filepos;
+    int32_t		size;
     char	name[8];
 
 } lumpinfo_t;
@@ -77,7 +77,7 @@ typedef struct lumpinfo_struct
 
 
 lumpinfo_t*	lumpinfo;		                                
-int		numlumps;
+int32_t		numlumps;
 
 void**		lumpcache;
 
@@ -96,10 +96,10 @@ void**		lumpcache;
 
 #else
 
-#define LONG(x) ((long)SwapLONG((unsigned long) (x)))
-#define SHORT(x) ((short)SwapSHORT((unsigned short) (x)))
+#define LONG(x) ((int32_t)SwapLONG((uint32_t) (x)))
+#define SHORT(x) ((int16_t)SwapSHORT((uint16_t) (x)))
 
-unsigned long SwapLONG(unsigned long x)
+uint32_t SwapLONG(uint32_t x)
 {
     return
 	(x>>24)
@@ -108,7 +108,7 @@ unsigned long SwapLONG(unsigned long x)
 	| (x<<24);
 }
 
-unsigned short SwapSHORT(unsigned short x)
+uint16_t SwapSHORT(uint16_t x)
 {
     return
 	(x>>8) | (x<<8);
@@ -132,7 +132,7 @@ void strupr (char *s)
 	*s++ = toupper(*s);
 }
 
-int filelength (int handle)
+int32_t filelength (int32_t handle)
 {
     struct stat	fileinfo;
   
@@ -147,11 +147,11 @@ int filelength (int handle)
 void openwad(char* wadname)
 {
 
-    int		wadfile;
-    int		tableoffset;
-    int		tablelength;
-    int		tablefilelength;
-    int		i;
+    int32_t		wadfile;
+    int32_t		tableoffset;
+    int32_t		tablelength;
+    int32_t		tablefilelength;
+    int32_t		i;
     wadinfo_t	header;
     filelump_t*	filetable;
 
@@ -192,10 +192,10 @@ void openwad(char* wadname)
 void*
 loadlump
 ( char*		lumpname,
-  int*		size )
+  int32_t*		size )
 {
 
-    int		i;
+    int32_t		i;
     void*	lump;
 
     for (i=0 ; i<numlumps ; i++)
@@ -225,23 +225,23 @@ loadlump
 void*
 getsfx
 ( char*		sfxname,
-  int*		len )
+  int32_t*		len )
 {
 
-    unsigned char*	sfx;
-    unsigned char*	paddedsfx;
-    int			i;
-    int			size;
-    int			paddedsize;
+    uint8_t*	sfx;
+    uint8_t*	paddedsfx;
+    int32_t			i;
+    int32_t			size;
+    int32_t			paddedsize;
     char		name[20];
 
     sprintf(name, "ds%s", sfxname);
 
-    sfx = (unsigned char *) loadlump(name, &size);
+    sfx = (uint8_t *) loadlump(name, &size);
 
     // pad the sound effect out to the mixing buffer size
     paddedsize = ((size-8 + (SAMPLECOUNT-1)) / SAMPLECOUNT) * SAMPLECOUNT;
-    paddedsfx = (unsigned char *) realloc(sfx, paddedsize+8);
+    paddedsfx = (uint8_t *) realloc(sfx, paddedsize+8);
     for (i=size ; i<paddedsize+8 ; i++)
 	paddedsfx[i] = 128;
 

@@ -49,25 +49,25 @@ void	P_SpawnMapThing (mapthing_t*	mthing);
 // MAP related Lookup tables.
 // Store VERTEXES, LINEDEFS, SIDEDEFS, etc.
 //
-int		numvertexes;
+int32_t		numvertexes;
 vertex_t*	vertexes;
 
-int		numsegs;
+int32_t		numsegs;
 seg_t*		segs;
 
-int		numsectors;
+int32_t		numsectors;
 sector_t*	sectors;
 
-int		numsubsectors;
+int32_t		numsubsectors;
 subsector_t*	subsectors;
 
-int		numnodes;
+int32_t		numnodes;
 node_t*		nodes;
 
-int		numlines;
+int32_t		numlines;
 line_t*		lines;
 
-int		numsides;
+int32_t		numsides;
 side_t*		sides;
 
 
@@ -79,11 +79,11 @@ side_t*		sides;
 // by spatial subdivision in 2D.
 //
 // Blockmap size.
-int		bmapwidth;
-int		bmapheight;	// size in mapblocks
-short*		blockmap;	// int for larger maps
+int32_t		bmapwidth;
+int32_t		bmapheight;	// size in mapblocks
+int16_t*		blockmap;	// int32_t for larger maps
 // offsets in blockmap are from here
-short*		blockmaplump;		
+int16_t*		blockmaplump;		
 // origin of block map
 fixed_t		bmaporgx;
 fixed_t		bmaporgy;
@@ -98,7 +98,7 @@ mobj_t**	blocklinks;
 // Without special effect, this could be
 //  used as a PVS lookup as well.
 //
-byte*		rejectmatrix;
+uint8_t*		rejectmatrix;
 
 
 // Maintain single and multi player starting spots.
@@ -115,10 +115,10 @@ mapthing_t	playerstarts[MAXPLAYERS];
 //
 // P_LoadVertexes
 //
-void P_LoadVertexes (int lump)
+void P_LoadVertexes (int32_t lump)
 {
-    byte*		data;
-    int			i;
+    uint8_t*		data;
+    int32_t			i;
     mapvertex_t*	ml;
     vertex_t*		li;
 
@@ -152,15 +152,15 @@ void P_LoadVertexes (int lump)
 //
 // P_LoadSegs
 //
-void P_LoadSegs (int lump)
+void P_LoadSegs (int32_t lump)
 {
-    byte*		data;
-    int			i;
+    uint8_t*		data;
+    int32_t			i;
     mapseg_t*		ml;
     seg_t*		li;
     line_t*		ldef;
-    int			linedef;
-    int			side;
+    int32_t			linedef;
+    int32_t			side;
 	
     numsegs = W_LumpLength (lump) / sizeof(mapseg_t);
     segs = Z_Malloc (numsegs*sizeof(seg_t),PU_LEVEL,0);	
@@ -195,10 +195,10 @@ void P_LoadSegs (int lump)
 //
 // P_LoadSubsectors
 //
-void P_LoadSubsectors (int lump)
+void P_LoadSubsectors (int32_t lump)
 {
-    byte*		data;
-    int			i;
+    uint8_t*		data;
+    int32_t			i;
     mapsubsector_t*	ms;
     subsector_t*	ss;
 	
@@ -224,10 +224,10 @@ void P_LoadSubsectors (int lump)
 //
 // P_LoadSectors
 //
-void P_LoadSectors (int lump)
+void P_LoadSectors (int32_t lump)
 {
-    byte*		data;
-    int			i;
+    uint8_t*		data;
+    int32_t			i;
     mapsector_t*	ms;
     sector_t*		ss;
 	
@@ -257,12 +257,12 @@ void P_LoadSectors (int lump)
 //
 // P_LoadNodes
 //
-void P_LoadNodes (int lump)
+void P_LoadNodes (int32_t lump)
 {
-    byte*	data;
-    int		i;
-    int		j;
-    int		k;
+    uint8_t*	data;
+    int32_t		i;
+    int32_t		j;
+    int32_t		k;
     mapnode_t*	mn;
     node_t*	no;
 	
@@ -294,12 +294,12 @@ void P_LoadNodes (int lump)
 //
 // P_LoadThings
 //
-void P_LoadThings (int lump)
+void P_LoadThings (int32_t lump)
 {
-    byte*		data;
-    int			i;
+    uint8_t*		data;
+    int32_t			i;
     mapthing_t*		mt;
-    int			numthings;
+    int32_t			numthings;
     boolean		spawn;
 	
     data = W_CacheLumpNum (lump,PU_STATIC);
@@ -350,10 +350,10 @@ void P_LoadThings (int lump)
 // P_LoadLineDefs
 // Also counts secret lines for intermissions.
 //
-void P_LoadLineDefs (int lump)
+void P_LoadLineDefs (int32_t lump)
 {
-    byte*		data;
-    int			i;
+    uint8_t*		data;
+    int32_t			i;
     maplinedef_t*	mld;
     line_t*		ld;
     vertex_t*		v1;
@@ -431,10 +431,10 @@ void P_LoadLineDefs (int lump)
 //
 // P_LoadSideDefs
 //
-void P_LoadSideDefs (int lump)
+void P_LoadSideDefs (int32_t lump)
 {
-    byte*		data;
-    int			i;
+    uint8_t*		data;
+    int32_t			i;
     mapsidedef_t*	msd;
     side_t*		sd;
 	
@@ -462,10 +462,10 @@ void P_LoadSideDefs (int lump)
 //
 // P_LoadBlockMap
 //
-void P_LoadBlockMap (int lump)
+void P_LoadBlockMap (int32_t lump)
 {
-    int		i;
-    int		count;
+    int32_t		i;
+    int32_t		count;
 	
     blockmaplump = W_CacheLumpNum (lump,PU_LEVEL);
     blockmap = blockmaplump+4;
@@ -495,15 +495,15 @@ void P_LoadBlockMap (int lump)
 void P_GroupLines (void)
 {
     line_t**		linebuffer;
-    int			i;
-    int			j;
-    int			total;
+    int32_t			i;
+    int32_t			j;
+    int32_t			total;
     line_t*		li;
     sector_t*		sector;
     subsector_t*	ss;
     seg_t*		seg;
     fixed_t		bbox[4];
-    int			block;
+    int32_t			block;
 	
     // look up sector number for each subsector
     ss = subsectors;
@@ -578,14 +578,14 @@ void P_GroupLines (void)
 //
 void
 P_SetupLevel
-( int		episode,
-  int		map,
-  int		playermask,
+( int32_t		episode,
+  int32_t		map,
+  int32_t		playermask,
   skill_t	skill)
 {
-    int		i;
+    int32_t		i;
     char	lumpname[9];
-    int		lumpnum;
+    int32_t		lumpnum;
 	
     totalkills = totalitems = totalsecret = wminfo.maxfrags = 0;
     wminfo.partime = 180;

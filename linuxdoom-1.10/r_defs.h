@@ -102,26 +102,26 @@ typedef	struct
 {
     fixed_t	floorheight;
     fixed_t	ceilingheight;
-    short	floorpic;
-    short	ceilingpic;
-    short	lightlevel;
-    short	special;
-    short	tag;
+    int16_t	floorpic;
+    int16_t	ceilingpic;
+    int16_t	lightlevel;
+    int16_t	special;
+    int16_t	tag;
 
     // 0 = untraversed, 1,2 = sndlines -1
-    int		soundtraversed;
+    int32_t		soundtraversed;
 
     // thing that made a sound (or null)
     mobj_t*	soundtarget;
 
     // mapblock bounding box for height changes
-    int		blockbox[4];
+    int32_t		blockbox[4];
 
     // origin for any sounds played by the sector
     degenmobj_t	soundorg;
 
     // if == validcount, already checked
-    int		validcount;
+    int32_t		validcount;
 
     // list of mobjs in sector
     mobj_t*	thinglist;
@@ -129,7 +129,7 @@ typedef	struct
     // thinker_t for reversable actions
     void*	specialdata;
 
-    int			linecount;
+    int32_t			linecount;
     struct line_s**	lines;	// [linecount] size
     
 } sector_t;
@@ -151,9 +151,9 @@ typedef struct
 
     // Texture indices.
     // We do not maintain names here. 
-    short	toptexture;
-    short	bottomtexture;
-    short	midtexture;
+    int16_t	toptexture;
+    int16_t	bottomtexture;
+    int16_t	midtexture;
 
     // Sector the SideDef is facing.
     sector_t*	sector;
@@ -187,13 +187,13 @@ typedef struct line_s
     fixed_t	dy;
 
     // Animation related.
-    short	flags;
-    short	special;
-    short	tag;
+    int16_t	flags;
+    int16_t	special;
+    int16_t	tag;
 
     // Visual appearance: SideDefs.
     //  sidenum[1] will be -1 if one sided
-    short	sidenum[2];			
+    int16_t	sidenum[2];			
 
     // Neat. Another bounding box, for the extent
     //  of the LineDef.
@@ -208,7 +208,7 @@ typedef struct line_s
     sector_t*	backsector;
 
     // if == validcount, already checked
-    int		validcount;
+    int32_t		validcount;
 
     // thinker_t for reversable actions
     void*	specialdata;		
@@ -227,8 +227,8 @@ typedef struct line_s
 typedef struct subsector_s
 {
     sector_t*	sector;
-    short	numlines;
-    short	firstline;
+    int16_t	numlines;
+    int16_t	firstline;
     
 } subsector_t;
 
@@ -274,7 +274,7 @@ typedef struct
     fixed_t	bbox[2][4];
 
     // If NF_SUBSECTOR its a subsector.
-    unsigned short children[2];
+    uint16_t children[2];
     
 } node_t;
 
@@ -284,19 +284,19 @@ typedef struct
 // posts are runs of non masked source pixels
 typedef struct
 {
-    byte		topdelta;	// -1 is the last post in a column
-    byte		length; 	// length data bytes follows
+    uint8_t		topdelta;	// -1 is the last post in a column
+    uint8_t		length; 	// length data bytes follows
 } post_t;
 
-// column_t is a list of 0 or more post_t, (byte)-1 terminated
+// column_t is a list of 0 or more post_t, (uint8_t)-1 terminated
 typedef post_t	column_t;
 
 
 
 // PC direct to screen pointers
 //B UNUSED - keep till detailshift in r_draw.c resolved
-//extern byte*	destview;
-//extern byte*	destscreen;
+//extern uint8_t*	destview;
+//extern uint8_t*	destscreen;
 
 
 
@@ -311,7 +311,7 @@ typedef post_t	column_t;
 //  precalculating 24bpp lightmap/colormap LUT.
 //  from darkening PLAYPAL to all black.
 // Could even us emore than 32 levels.
-typedef byte	lighttable_t;	
+typedef uint8_t	lighttable_t;	
 
 
 
@@ -322,15 +322,15 @@ typedef byte	lighttable_t;
 typedef struct drawseg_s
 {
     seg_t*		curline;
-    int			x1;
-    int			x2;
+    int32_t			x1;
+    int32_t			x2;
 
     fixed_t		scale1;
     fixed_t		scale2;
     fixed_t		scalestep;
 
     // 0=none, 1=bottom, 2=top, 3=both
-    int			silhouette;
+    int32_t			silhouette;
 
     // do not clip sprites above this
     fixed_t		bsilheight;
@@ -340,9 +340,9 @@ typedef struct drawseg_s
     
     // Pointers to lists for sprite clipping,
     //  all three adjusted so [x1] is first value.
-    short*		sprtopclip;		
-    short*		sprbottomclip;	
-    short*		maskedtexturecol;
+    int16_t*		sprtopclip;		
+    int16_t*		sprbottomclip;	
+    int16_t*		maskedtexturecol;
     
 } drawseg_t;
 
@@ -355,11 +355,11 @@ typedef struct drawseg_s
 // of patches.
 typedef struct 
 { 
-    short		width;		// bounding box size 
-    short		height; 
-    short		leftoffset;	// pixels to the left of origin 
-    short		topoffset;	// pixels below the origin 
-    int			columnofs[8];	// only [width] used
+    int16_t		width;		// bounding box size 
+    int16_t		height; 
+    int16_t		leftoffset;	// pixels to the left of origin 
+    int16_t		topoffset;	// pixels below the origin 
+    int32_t			columnofs[8];	// only [width] used
     // the [0] is &columnofs[width] 
 } patch_t;
 
@@ -378,8 +378,8 @@ typedef struct vissprite_s
     struct vissprite_s*	prev;
     struct vissprite_s*	next;
     
-    int			x1;
-    int			x2;
+    int32_t			x1;
+    int32_t			x2;
 
     // for line side calculation
     fixed_t		gx;
@@ -398,13 +398,13 @@ typedef struct vissprite_s
     fixed_t		xiscale;	
 
     fixed_t		texturemid;
-    int			patch;
+    int32_t			patch;
 
     // for color translation and shadow draw,
     //  maxbright frames as well
     lighttable_t*	colormap;
    
-    int			mobjflags;
+    int32_t			mobjflags;
     
 } vissprite_t;
 
@@ -432,10 +432,10 @@ typedef struct
     boolean	rotate;
 
     // Lump to use for view angles 0-7.
-    short	lump[8];
+    int16_t	lump[8];
 
     // Flip bit (1 = flip) to use for view angles 0-7.
-    byte	flip[8];
+    uint8_t	flip[8];
     
 } spriteframe_t;
 
@@ -447,7 +447,7 @@ typedef struct
 //
 typedef struct
 {
-    int			numframes;
+    int32_t			numframes;
     spriteframe_t*	spriteframes;
 
 } spritedef_t;
@@ -460,22 +460,22 @@ typedef struct
 typedef struct
 {
   fixed_t		height;
-  int			picnum;
-  int			lightlevel;
-  int			minx;
-  int			maxx;
+  int32_t			picnum;
+  int32_t			lightlevel;
+  int32_t			minx;
+  int32_t			maxx;
   
   // leave pads for [minx-1]/[maxx+1]
   
-  byte		pad1;
+  uint8_t		pad1;
   // Here lies the rub for all
   //  dynamic resize/change of resolution.
-  byte		top[SCREENWIDTH];
-  byte		pad2;
-  byte		pad3;
+  uint8_t		top[SCREENWIDTH];
+  uint8_t		pad2;
+  uint8_t		pad3;
   // See above.
-  byte		bottom[SCREENWIDTH];
-  byte		pad4;
+  uint8_t		bottom[SCREENWIDTH];
+  uint8_t		pad4;
 
 } visplane_t;
 

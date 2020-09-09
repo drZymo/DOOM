@@ -32,10 +32,10 @@
 #endif
 
 // Retrieve column data for span blitting.
-byte*
+uint8_t*
 R_GetColumn
-( int		tex,
-  int		col );
+( int32_t		tex,
+  int32_t		col );
 
 
 // I/O, setting up the stuff.
@@ -46,13 +46,13 @@ void R_PrecacheLevel (void);
 // Retrieval.
 // Floor/ceiling opaque texture tiles,
 // lookup by name. For animation?
-int R_FlatNumForName (char* name);
+int32_t R_FlatNumForName (char* name);
 
 
 // Called by P_Ticker for switches and animations,
 // returns the texture number for the texture name.
-int R_TextureNumForName (char *name);
-int R_CheckTextureNumForName (char *name);
+int32_t R_TextureNumForName (char *name);
+int32_t R_CheckTextureNumForName (char *name);
 
 #endif
 //-----------------------------------------------------------------------------

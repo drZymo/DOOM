@@ -58,7 +58,7 @@ P_AproxDistance
 // P_PointOnLineSide
 // Returns 0 or 1
 //
-int
+int32_t
 P_PointOnLineSide
 ( fixed_t	x,
   fixed_t	y,
@@ -102,13 +102,13 @@ P_PointOnLineSide
 // Considers the line to be infinite
 // Returns side 0 or 1, -1 if box crosses the line.
 //
-int
+int32_t
 P_BoxOnLineSide
 ( fixed_t*	tmbox,
   line_t*	ld )
 {
-    int		p1;
-    int		p2;
+    int32_t		p1;
+    int32_t		p2;
 	
     switch (ld->slopetype)
     {
@@ -153,7 +153,7 @@ P_BoxOnLineSide
 // P_PointOnDivlineSide
 // Returns 0 or 1.
 //
-int
+int32_t
 P_PointOnDivlineSide
 ( fixed_t	x,
   fixed_t	y,
@@ -342,8 +342,8 @@ void P_LineOpening (line_t* linedef)
 //
 void P_UnsetThingPosition (mobj_t* thing)
 {
-    int		blockx;
-    int		blocky;
+    int32_t		blockx;
+    int32_t		blocky;
 
     if ( ! (thing->flags & MF_NOSECTOR) )
     {
@@ -393,8 +393,8 @@ P_SetThingPosition (mobj_t* thing)
 {
     subsector_t*	ss;
     sector_t*		sec;
-    int			blockx;
-    int			blocky;
+    int32_t			blockx;
+    int32_t			blocky;
     mobj_t**		link;
 
     
@@ -466,12 +466,12 @@ P_SetThingPosition (mobj_t* thing)
 //
 boolean
 P_BlockLinesIterator
-( int			x,
-  int			y,
+( int32_t			x,
+  int32_t			y,
   boolean(*func)(line_t*) )
 {
-    int			offset;
-    short*		list;
+    int32_t			offset;
+    int16_t*		list;
     line_t*		ld;
 	
     if (x<0
@@ -507,8 +507,8 @@ P_BlockLinesIterator
 //
 boolean
 P_BlockThingsIterator
-( int			x,
-  int			y,
+( int32_t			x,
+  int32_t			y,
   boolean(*func)(mobj_t*) )
 {
     mobj_t*		mobj;
@@ -542,7 +542,7 @@ intercept_t*	intercept_p;
 
 divline_t 	trace;
 boolean 	earlyout;
-int		ptflags;
+int32_t		ptflags;
 
 //
 // PIT_AddLineIntercepts.
@@ -557,8 +557,8 @@ int		ptflags;
 boolean
 PIT_AddLineIntercepts (line_t* ld)
 {
-    int			s1;
-    int			s2;
+    int32_t			s1;
+    int32_t			s2;
     fixed_t		frac;
     divline_t		dl;
 	
@@ -616,8 +616,8 @@ boolean PIT_AddThingIntercepts (mobj_t* thing)
     fixed_t		x2;
     fixed_t		y2;
     
-    int			s1;
-    int			s2;
+    int32_t			s1;
+    int32_t			s2;
     
     boolean		tracepositive;
 
@@ -680,7 +680,7 @@ P_TraverseIntercepts
 ( traverser_t	func,
   fixed_t	maxfrac )
 {
-    int			count;
+    int32_t			count;
     fixed_t		dist;
     intercept_t*	scan;
     intercept_t*	in;
@@ -741,7 +741,7 @@ P_PathTraverse
   fixed_t		y1,
   fixed_t		x2,
   fixed_t		y2,
-  int			flags,
+  int32_t			flags,
   boolean (*trav) (intercept_t *))
 {
     fixed_t	xt1;
@@ -757,13 +757,13 @@ P_PathTraverse
     fixed_t	xintercept;
     fixed_t	yintercept;
     
-    int		mapx;
-    int		mapy;
+    int32_t		mapx;
+    int32_t		mapy;
     
-    int		mapxstep;
-    int		mapystep;
+    int32_t		mapxstep;
+    int32_t		mapystep;
 
-    int		count;
+    int32_t		count;
 		
     earlyout = flags & PT_EARLYOUT;
 		

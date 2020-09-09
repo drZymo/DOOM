@@ -23,6 +23,8 @@
 #ifndef __M_CHEAT__
 #define __M_CHEAT__
 
+#include <stdint.h>
+
 //
 // CHEAT SEQUENCE PACKAGE
 //
@@ -33,12 +35,12 @@
 
 typedef struct
 {
-    unsigned char*	sequence;
-    unsigned char*	p;
+    uint8_t*	sequence;
+    uint8_t*	p;
     
 } cheatseq_t;
 
-int
+int32_t
 cht_CheckCheat
 ( cheatseq_t*		cht,
   char			key );

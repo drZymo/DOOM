@@ -24,6 +24,7 @@
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__
 
+#include <stdint.h>
 
 #ifndef __BYTEBOOL__
 #define __BYTEBOOL__
@@ -33,7 +34,7 @@ typedef bool boolean;
 #else
 typedef enum {false, true} boolean;
 #endif
-typedef unsigned char byte;
+typedef uint8_t uint8_t;
 #endif
 
 
@@ -42,17 +43,17 @@ typedef unsigned char byte;
 #include <values.h>
 #else
 #define MAXCHAR		((char)0x7f)
-#define MAXSHORT	((short)0x7fff)
+#define MAXSHORT	((int16_t)0x7fff)
 
-// Max pos 32-bit int.
-#define MAXINT		((int)0x7fffffff)	
-#define MAXLONG		((long)0x7fffffff)
+// Max pos 32-bit int32_t.
+#define MAXINT		((int32_t)0x7fffffff)	
+#define MAXLONG		((int32_t)0x7fffffff)
 #define MINCHAR		((char)0x80)
-#define MINSHORT	((short)0x8000)
+#define MINSHORT	((int16_t)0x8000)
 
 // Max negative 32-bit integer.
-#define MININT		((int)0x80000000)	
-#define MINLONG		((long)0x80000000)
+#define MININT		((int32_t)0x80000000)	
+#define MINLONG		((int32_t)0x80000000)
 #endif
 
 
