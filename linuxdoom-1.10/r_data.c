@@ -43,6 +43,7 @@
 
 
 #include "r_data.h"
+#include <stdbool.h>
 
 //
 // Graphics.
@@ -69,7 +70,7 @@ typedef struct
     int16_t	patch;
     int16_t	stepdir;
     int16_t	colormap;
-} mappatch_t;
+} __attribute__((packed)) mappatch_t;
 
 
 //
@@ -80,13 +81,13 @@ typedef struct
 typedef struct
 {
     char		name[8];
-    boolean		masked;	
+    uint8_t		masked;	 // boolean
     int16_t		width;
     int16_t		height;
-    void		**columndirectory;	// OBSOLETE
+    uint32_t    obsolete;//void		**columndirectory;	// OBSOLETE
     int16_t		patchcount;
     mappatch_t	patches[1];
-} maptexture_t;
+} __attribute__((packed)) maptexture_t;
 
 
 // A single patch from a texture definition,
@@ -100,7 +101,7 @@ typedef struct
     int32_t		originx;	
     int32_t		originy;
     int32_t		patch;
-} texpatch_t;
+} __attribute__((packed)) texpatch_t;
 
 
 // A maptexturedef_t describes a rectangular texture,
@@ -118,7 +119,7 @@ typedef struct
     int16_t	patchcount;
     texpatch_t	patches[1];		
     
-} texture_t;
+} __attribute__((packed)) texture_t;
 
 
 
