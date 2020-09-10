@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C++ -*-
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -22,12 +22,32 @@
 //-----------------------------------------------------------------------------
 
 #include "doomlib.h"
+#include <stdio.h>
 
-int
-main
-( int		argc,
-  char**	argv ) 
-{ 
-    Run(argc, argv);
+int file_index = 0;
+
+void FrameHandler(int32_t width, int32_t height, uint8_t *framebuffer)
+{
+    printf("F");
+
+    char filename[64];
+    sprintf(filename, "doom%i.raw", file_index);
+    FILE* fd = fopen(filename, "w");
+    fwrite((void *)framebuffer, 3, width * height, fd);
+    fclose(fd);
+
+    file_index++;
+}
+
+int main(int argc,
+         char **argv)
+{
+    char* args[] = {
+        "doomtest",
+        //"-skill", "4",
+        //"-warp", "1", "1",
+    };
+
+    Run(sizeof(args)/sizeof(args[0]), args, FrameHandler);
     return 0;
-} 
+}

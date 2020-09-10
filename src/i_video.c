@@ -45,6 +45,8 @@
 int32_t X_width;
 int32_t X_height;
 
+uint8_t g_palette[768]; // 256 * RGB
+
 
 void I_ShutdownGraphics(void)
 {
@@ -113,6 +115,7 @@ void I_ReadScreen(int8_t *scr)
 void I_SetPalette(int8_t *palette)
 {
 	// Not used right now
+	memcpy(g_palette, palette, 768);
 }
 
 void I_InitGraphics(void)

@@ -85,6 +85,10 @@
 //
 void D_DoomLoop (void);
 
+/* -- PyDoom addition -- */
+extern void D_ProcessFrame(void);
+/* --------------------- */
+
 
 char*		wadfiles[MAXWADFILES];
 
@@ -164,7 +168,13 @@ void D_ProcessEvents (void)
 	 && (W_CheckNumForName("map01")<0) )
       return;
 	
-    for ( ; eventtail != eventhead ; eventtail = (eventtail + 1)&(MAXEVENTS-1) )
+     /* -- PyDoom addition -- */
+    // Right before all events are processed, let the handler process the current frame
+    // and post events if needed.
+    D_ProcessFrame();
+    /* --------------------- */
+
+   for ( ; eventtail != eventhead ; eventtail = (eventtail + 1)&(MAXEVENTS-1) )
     {
 	ev = &events[eventtail];
 	if (M_Responder (ev))
