@@ -8,7 +8,7 @@
             "name": "Debug doom",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/doom",
+            "program": "${workspaceFolder}/build/doomtest",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/../doom1/",

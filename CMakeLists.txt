@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(DoomLib VERSION 1.10 DESCRIPTION "Library for playing Doom in memory. No screen, no sound, no network.")
 
-#add_library(doom SHARED
-add_executable(doom
+add_library(doom SHARED
     src/doomdef.c
     src/doomstat.c
     src/dstrings.c
@@ -64,7 +63,6 @@ add_executable(doom
     src/z_zone.c
     src/info.c
     src/sounds.c
-    src/i_main.c
     src/doomlib.c
 )
 
@@ -74,3 +72,10 @@ target_compile_options(doom PUBLIC -std=gnu11 -Wall -pedantic -fdiagnostics-colo
 
 set_target_properties(doom PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(doom PROPERTIES SOVERSION 1.10)
+
+add_executable(doomtest
+    src/i_main.c
+)
+target_link_libraries(doomtest PUBLIC doom)
+target_compile_definitions(doomtest PRIVATE NORMALUNIX LINUX)
+target_compile_options(doomtest PUBLIC -std=gnu11 -Wall -pedantic -fdiagnostics-color=always)

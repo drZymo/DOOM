@@ -4,6 +4,6 @@
 #include "m_argv.h"
 #include "d_main.h"
 
-void Run(int argc, char* argv[]);
+extern void Run(int argc, char* argv[]);
 
 #endif
