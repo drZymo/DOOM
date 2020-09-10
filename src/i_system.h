@@ -88,6 +88,7 @@ void I_Tactile (int32_t on, int32_t off, int32_t total);
 
 void I_Error (char *error, ...);
 
+void I_Exit(int code);
 
 #endif
 //-----------------------------------------------------------------------------

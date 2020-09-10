@@ -705,7 +705,7 @@ void IdentifyVersion (void)
     gamemode = indetermined;
 
     // We don't abort. Let's see what the PWAD contains.
-    //exit(1);
+    //I_Exit(1);
     //I_Error ("Game mode indeterminate\n");
 }
 
@@ -735,7 +735,7 @@ void FindResponseFile (void)
 	    if (!handle)
 	    {
 		printf ("\nNo such response file!");
-		exit(1);
+		I_Exit(1);
 	    }
 	    printf("Found response file %s!\n",&myargv[i][1]);
 	    fseek (handle,0,SEEK_END);

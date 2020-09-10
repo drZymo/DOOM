@@ -116,7 +116,7 @@ void I_Quit (void)
     I_ShutdownMusic();
     M_SaveDefaults ();
     I_ShutdownGraphics();
-    exit(0);
+    I_Exit(0);
 }
 
 void I_WaitVBL(int32_t count)
@@ -175,5 +175,18 @@ void I_Error (char *error, ...)
     D_QuitNetGame ();
     I_ShutdownGraphics();
     
-    exit(-1);
+    I_Exit(-1);
 }
+
+/* -- DoomLib addition -- */
+
+#include <setjmp.h>
+extern jmp_buf exit_jmp;
+
+void I_Exit(int code)
+{
+    // Instead of calling exit() we use longjmp to jump back to the entry function and gracefully exit.
+    longjmp(exit_jmp, code);
+}
+
+/* --------------------- */
