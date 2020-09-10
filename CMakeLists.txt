@@ -67,12 +67,12 @@ add_executable(doom
     src/i_main.c
 )
 
-target_link_libraries(doom PUBLIC nsl m)
+target_link_libraries(doom PUBLIC m)
 
 target_include_directories(doom PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_compile_definitions(doom PRIVATE NORMALUNIX LINUX)
-target_compile_options(doom PUBLIC -Wall -pedantic )
+target_compile_options(doom PUBLIC -std=gnu11 -Wall -pedantic -fdiagnostics-color=always)
 
 # TODO: replace with target_link_options in newer cmake
 #set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--gc-sections,--print-gc-sections")

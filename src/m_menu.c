@@ -223,7 +223,7 @@ void M_WriteText(int32_t x, int32_t y, char *string);
 int32_t  M_StringWidth(char *string);
 int32_t  M_StringHeight(char *string);
 void M_StartControlPanel(void);
-void M_StartMessage(char *string,void *routine,boolean input);
+void M_StartMessage(char *string,void (*routine)(int32_t),boolean input);
 void M_StopMessage(void);
 void M_ClearMenus (void);
 
@@ -1223,7 +1223,7 @@ M_DrawSelCell
 void
 M_StartMessage
 ( char*		string,
-  void*		routine,
+  void      (*routine)(int32_t),
   boolean	input )
 {
     messageLastMenuActive = menuactive;
