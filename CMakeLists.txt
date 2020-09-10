@@ -65,6 +65,7 @@ add_executable(doom
     src/info.c
     src/sounds.c
     src/i_main.c
+    src/doomlib.c
 )
 
 target_link_libraries(doom PUBLIC m)

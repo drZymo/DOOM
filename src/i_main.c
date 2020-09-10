@@ -21,22 +21,13 @@
 //
 //-----------------------------------------------------------------------------
 
-
-
-#include "doomdef.h"
-
-#include "m_argv.h"
-#include "d_main.h"
+#include "doomlib.h"
 
 int
 main
 ( int		argc,
   char**	argv ) 
 { 
-    myargc = argc; 
-    myargv = argv; 
- 
-    D_DoomMain (); 
-
+    Run(argc, argv);
     return 0;
 } 
