@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug linuxdoom",
+            "name": "Debug doom",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/linuxdoom-1.10/linux/linuxxdoom",
+            "program": "${workspaceFolder}/build/doom",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/../doom1/",
@@ -22,7 +22,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Build linuxdoom",
+            "preLaunchTask": "Doom - Compile",
             "miDebuggerPath": "/usr/bin/gdb"
         }
     ]

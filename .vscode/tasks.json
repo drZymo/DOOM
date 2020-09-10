@@ -4,14 +4,46 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build linuxdoom",
+            "label": "Doom - Create build",
             "type": "shell",
-            "command": "make -j12 -C linuxdoom-1.10",
-            "problemMatcher": [ "$gcc" ],
+            "command": "mkdir -p ${workspaceFolder}/build",
+            "group": "build"
+        },
+        {
+            "label": "Doom - Generate build",
+            "type": "shell",
+            "command": "cmake -GNinja ${workspaceFolder}",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": "build",
+            "dependsOn": [
+                "Doom - Create build"
+            ]
+        },
+        {
+            "label": "Doom - Compile",
+            "type": "shell",
+            "command": "ninja",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": [
+                "Doom - Generate build"
+            ]
+        },
+        {
+            "label": "Doom - Clean",
+            "type": "shell",
+            "command": "rm -rf ${workspaceFolder}/build",
+            "problemMatcher": [],
         }
     ]
 }
