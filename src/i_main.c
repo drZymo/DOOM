@@ -31,7 +31,7 @@ void FrameHandler(int32_t width, int32_t height, uint8_t *framebuffer)
     printf("F");
 
     char filename[64];
-    sprintf(filename, "doom%i.raw", file_index);
+    sprintf(filename, "raw/doom%i.raw", file_index);
     FILE* fd = fopen(filename, "w");
     fwrite((void *)framebuffer, 3, width * height, fd);
     fclose(fd);
@@ -44,8 +44,8 @@ int main(int argc,
 {
     char* args[] = {
         "doomtest",
-        //"-skill", "4",
-        //"-warp", "1", "1",
+        "-skill", "4",
+        "-warp", "1", "1",
     };
 
     Run(sizeof(args)/sizeof(args[0]), args, FrameHandler);

@@ -40,13 +40,13 @@ void D_ProcessFrame(void)
 
     for (int32_t y = 0; y < SCREENHEIGHT; y++)
     {
-        int32_t i = SCREENWIDTH * y;
         for (int32_t x = 0; x < SCREENWIDTH; x++)
         {
-            uint8_t p = screens[0][i + x];
-            framebuffer[(i + x) * 3 + 0] = g_palette[p * 3 + 0];
-            framebuffer[(i + x) * 3 + 1] = g_palette[p * 3 + 1];
-            framebuffer[(i + x) * 3 + 2] = g_palette[p * 3 + 2];
+            int32_t i = SCREENWIDTH * y + x;
+            uint8_t p = screens[0][i];
+            framebuffer[i * 3 + 0] = g_palette[p * 3 + 0];
+            framebuffer[i * 3 + 1] = g_palette[p * 3 + 1];
+            framebuffer[i * 3 + 2] = g_palette[p * 3 + 2];
         }
     }
 

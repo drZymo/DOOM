@@ -114,8 +114,14 @@ void I_ReadScreen(int8_t *scr)
 //
 void I_SetPalette(int8_t *palette)
 {
-	// Not used right now
-	memcpy(g_palette, palette, 768);
+	int i;
+
+	for (i = 0; i < 256; i++)
+	{
+		g_palette[i * 3 + 0] = gammatable[usegamma][*palette++] & ~3;
+		g_palette[i * 3 + 1] = gammatable[usegamma][*palette++] & ~3;
+		g_palette[i * 3 + 2] = gammatable[usegamma][*palette++] & ~3;
+	}
 }
 
 void I_InitGraphics(void)
