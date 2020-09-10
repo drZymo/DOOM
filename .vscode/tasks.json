@@ -4,25 +4,37 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Doom - Create build",
+            "label": "Create build",
             "type": "shell",
             "command": "mkdir -p ${workspaceFolder}/build",
             "group": "build"
         },
         {
-            "label": "Doom - Generate build",
+            "label": "Generate build (Debug)",
             "type": "shell",
-            "command": "cmake -GNinja ${workspaceFolder}",
+            "command": "cmake -DCMAKE_BUILD_TYPE=Debug -GNinja ${workspaceFolder}",
             "options": {
                 "cwd": "${workspaceFolder}/build"
             },
             "group": "build",
             "dependsOn": [
-                "Doom - Create build"
+                "Create build"
             ]
         },
         {
-            "label": "Doom - Compile",
+            "label": "Generate build (Release)",
+            "type": "shell",
+            "command": "cmake -DCMAKE_BUILD_TYPE=Release -GNinja ${workspaceFolder}",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": "build",
+            "dependsOn": [
+                "Create build"
+            ]
+        },
+        {
+            "label": "Compile (Debug)",
             "type": "shell",
             "command": "ninja",
             "options": {
@@ -36,11 +48,26 @@
                 "$gcc"
             ],
             "dependsOn": [
-                "Doom - Generate build"
+                "Generate build (Debug)"
             ]
         },
         {
-            "label": "Doom - Clean",
+            "label": "Compile (Release)",
+            "type": "shell",
+            "command": "ninja",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "group": "build",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "dependsOn": [
+                "Generate build (Release)"
+            ]
+        },
+        {
+            "label": "Clean",
             "type": "shell",
             "command": "rm -rf ${workspaceFolder}/build",
             "problemMatcher": [],

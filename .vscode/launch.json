@@ -22,7 +22,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Doom - Compile",
+            "preLaunchTask": "Compile (Debug)",
             "miDebuggerPath": "/usr/bin/gdb"
         }
     ]
