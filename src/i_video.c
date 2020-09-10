@@ -33,7 +33,6 @@
 
 #include <netinet/in.h>
 #include <errno.h>
-#include <signal.h>
 
 #include "doomstat.h"
 #include "i_system.h"
@@ -123,8 +122,6 @@ void I_InitGraphics(void)
 	if (!firsttime)
 		return;
 	firsttime = 0;
-
-	signal(SIGINT, (void (*)(int32_t))I_Quit);
 
 	screens[0] = (uint8_t *)malloc(SCREENWIDTH * SCREENHEIGHT);
 }

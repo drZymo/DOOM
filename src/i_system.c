@@ -28,6 +28,7 @@
 #include <stdarg.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include "doomdef.h"
 #include "m_misc.h"
@@ -102,6 +103,8 @@ int32_t  I_GetTime (void)
 //
 void I_Init (void)
 {
+	signal(SIGINT, (void (*)(int32_t))I_Quit);
+
     I_InitSound();
     //  I_InitGraphics();
 }
