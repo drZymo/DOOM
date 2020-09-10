@@ -6,7 +6,7 @@
         {
             "label": "Build linuxdoom",
             "type": "shell",
-            "command": "make -C linuxdoom-1.10",
+            "command": "make -j12 -C linuxdoom-1.10",
             "problemMatcher": [ "$gcc" ],
             "group": {
                 "kind": "build",
